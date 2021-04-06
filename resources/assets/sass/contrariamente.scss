@@ -1,3 +1,4 @@
+@import 'home.scss';
 // App name
 html body.loggedIn nav.navbar.navbar-expand.navbar-light.navbar-laravel.shadow-none.border-bottom.sticky-top.py-1 div.container a.navbar-brand.d-flex.align-items-center span.font-weight-bold.mb-0.d-none.d-sm-block {
     color: map-get($theme-colors, 'primary');
