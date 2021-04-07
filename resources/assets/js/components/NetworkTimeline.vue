@@ -7,23 +7,7 @@
 						<button class="btn btn-dark px-4 rounded-pill font-weight-bold shadow" @click="syncNewPosts">Load New Posts</button>
 					</p>
 				</div>
-				<div class="d-none col-12 pl-3 pl-md-0 pt-3 pl-0">
-					<div class="d-none d-md-flex justify-content-between align-items-center">
-						<p class="lead text-muted mb-0"><i :class="[scope == 'home' ? 'fas fa-home':'fas fa-stream']"></i> &nbsp; {{scope == 'local' ? 'Public' : 'Home'}} Timeline</p>
-						<p class="mb-0">
-							<span class="btn-group">
-								<a href="#" :class="[layout=='feed'?'btn btn-sm btn-outline-primary font-weight-bold text-decoration-none':'btn btn-sm btn-outline-lighter font-weight-light text-decoration-none']" @click.prevent="switchFeedLayout('feed')"><i class="fas fa-list"></i></a>
-								<a href="#" :class="[layout!=='feed'?'btn btn-sm btn-outline-primary font-weight-bold text-decoration-none':'btn btn-sm btn-outline-lighter font-weight-light text-decoration-none']" @click.prevent="switchFeedLayout('grid')"><i class="fas fa-th"></i></a>
-							</span>
-						</p>
-						<p class="mb-0 d-none d-md-block">
-							<a class="btn btn-block btn-primary btn-sm font-weight-bold" href="/i/compose" data-toggle="modal" data-target="#composeModal">
-								New Post
-							</a>
-						</p>
-					</div>
-					<hr>
-				</div>
+
 				<div class="col-md-8 col-lg-8 px-0 mb-sm-3 timeline order-2 order-md-1">
 					<div style="margin-top:-2px;">
 						<story-component v-if="config.features.stories"></story-component>
@@ -235,23 +219,6 @@
 										<span class="status-content" v-html="status.content"></span>
 									</p>
 								</div>
-								<!-- <div class="comments" v-if="status.id == replyId && !status.comments_disabled">
-									<p class="mb-0 d-flex justify-content-between align-items-top read-more mt-2" style="overflow-y: hidden;" v-for="(reply, index) in replies">
-										<span>
-											<a class="text-dark font-weight-bold mr-1" :href="profileUrl(reply)">{{reply.account.username}}</a>
-											<span v-html="reply.content" style="word-break: break-all;" class="comment-body"></span>
-										</span>
-										<span class="mb-0" style="min-width:38px">
-											<span v-on:click="likeStatus(reply, $event);">
-												<i v-bind:class="[reply.favourited ? 'fas fa-heart fa-sm text-danger cursor-pointer':'far fa-heart fa-sm text-lighter cursor-pointer']"></i>
-											</span>
-											<!-- <post-menu :status="reply" :profile="profile" size="sm" :modal="'true'" :feed="feed" class="d-inline-flex pl-2"></post-menu> - ->
-											<span class="text-lighter pl-2 cursor-pointer" @click="ctxMenu(reply)">
-												<span class="fas fa-ellipsis-v text-lighter"></span>
-											</span>
-										</span>
-									</p>
-								</div> -->
 								<div class="timestamp mt-2">
 									<p class="small text-uppercase mb-0">
 										<a :href="statusUrl(status)" class="text-muted">
@@ -792,6 +759,38 @@
 					profile-layout="metro">
 				</post-component> -->
 			</b-modal>
+
+			<b-modal ref="networkWarning"
+				id="network-warning"
+				hide-footer
+				centered
+				rounded
+				title="Content Warning"
+				title-tag="p"
+				title-class="font-weight-bold text-muted"
+				size="md"
+				body-class="p-2 rounded">
+				<div class="">
+					<p class="text-center pt-4">
+						<i class="fas fa-exclamation-triangle fa-6x text-danger"></i>
+					</p>
+
+					<p class="lead pt-3 px-5">The network timeline may contain unmoderated and/or NSFW content from other servers.</p>
+					<p class="font-weight-light pb-3 px-5">View the <a href="/site/kb/timelines" class="font-weight-bold">timeline documentation</a> for more info.</p>
+
+					<div class="d-flex justify-content-between pb-4 px-5">
+						<a href="/" class="btn btn-outline-secondary font-weight-bold">Go Back</a>
+						<button class="btn btn-primary font-weight-bold" @click="confirmNetworkWarning()">I Accept</button>
+					</div>
+
+					<div class="mb-0 px-5 pb-3">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="networkWarningSkipModel" v-model="networkWarningHide">
+							<label class="custom-control-label font-weight-light" for="networkWarningSkipModel">Don't show this warning again on this device</label>
+						</div>
+					</div>
+				</div>
+			</b-modal>
 		</div>
 	</div>
 </template>
@@ -893,7 +892,8 @@
 							})
 						}
 					]
-				}
+				},
+				networkWarningHide: null
 			}
 		},
 
@@ -922,12 +922,13 @@
 			}
 		},
 
-		beforeMount() {
+		mounted() {
+			if(localStorage.getItem('pf_network.warning') !== 'false') {
+				$('#content').css({'opacity': 0});
+				this.$refs.networkWarning.show();
+			}
 			this.fetchProfile();
 			this.fetchTimelineApi();
-		},
-
-		mounted() {
 			// todo: release after dark mode updates
 			/* if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches || $('link[data-stylesheet="dark"]').length != 0) {
 				this.modes.dark = true;
@@ -989,20 +990,7 @@
 			},
 
 			fetchTimelineApi() {
-				let apiUrl = false;
-				switch(this.scope) {
-					case 'home':
-					apiUrl = '/api/pixelfed/v1/timelines/home';
-					break;
-
-					case 'local':
-					apiUrl = '/api/pixelfed/v1/timelines/public';
-					break;
-
-					case 'network':
-					apiUrl = '/api/pixelfed/v1/timelines/network';
-					break;
-				}
+				let apiUrl = '/api/pixelfed/v1/timelines/network';
 				axios.get(apiUrl, {
 					params: {
 						max_id: this.max_id,
@@ -1048,20 +1036,7 @@
 					this.loading = false;
 					$state.complete();
 				}
-				let apiUrl = false;
-				switch(this.scope) {
-					case 'home':
-					apiUrl = '/api/pixelfed/v1/timelines/home';
-					break;
-
-					case 'local':
-					apiUrl = '/api/pixelfed/v1/timelines/public';
-					break;
-
-					case 'network':
-					apiUrl = '/api/pixelfed/v1/timelines/network';
-					break;
-				}
+				let apiUrl = '/api/pixelfed/v1/timelines/network';
 				axios.get(apiUrl, {
 					params: {
 						max_id: this.max_id,
@@ -1138,10 +1113,10 @@
 				setTimeout(function() {
 					$([document.documentElement, document.body]).animate({
 						scrollTop: $(`div[data-status-id="${id}"]`).offset().top
-					}, 1000);
+					}, 500);
 				}, 500);
 
-				let path = this.scope == 'home' ? '/' : '/timeline/public';
+				let path = '/timeline/network';
 				window.history.pushState({}, '', path);
 			},
 
@@ -1885,7 +1860,6 @@
 			// real time watcher
 			rtw() {
 				this.mpPoller = setInterval(() => {
-					let apiUrl = false;
 					this.mpCount++;
 					if(this.mpCount > 10) {
 						this.mpInterval = 30000;
@@ -1893,19 +1867,7 @@
 					if(this.mpCount > 50) {
 						this.mpInterval = (5 * 60 * 1000);
 					}
-					switch(this.scope) {
-						case 'home':
-						apiUrl = '/api/pixelfed/v1/timelines/home';
-						break;
-
-						case 'local':
-						apiUrl = '/api/pixelfed/v1/timelines/public';
-						break;
-
-						case 'network':
-						apiUrl = '/api/pixelfed/v1/timelines/network';
-						break;
-					}
+					let apiUrl = '/api/pixelfed/v1/timelines/network';
 					axios.get(apiUrl, {
 						params: {
 							max_id: 0,
@@ -2139,6 +2101,15 @@
 					this.pagination = response.data.meta.pagination;
 					$('.load-more-link').removeClass('d-none');
 				});
+			},
+
+			confirmNetworkWarning() {
+				this.$refs.networkWarning.hide();
+				$('#content').css({'opacity': 1});
+
+				if(this.networkWarningHide === true) {
+					localStorage.setItem('pf_network.warning', 'false')
+				}
 			}
 		},
 
