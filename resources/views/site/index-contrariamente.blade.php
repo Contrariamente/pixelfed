@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
 
     <meta charset="utf-8">
@@ -35,40 +36,38 @@
             color: #fff;
             border-radius: 50% !important;
             width: 60px;
-            height:60px;
+            height: 60px;
         }
+
         .section-spacer {
             height: 13vh;
         }
     </style>
 </head>
+
 <body class="">
     <main id="content">
         <section class="container">
             <div class="section-spacer"></div>
-            <div class="row pt-md-5 mt-5">
+            <div class="row pt-md-5 mt-5" id="div-total">
                 <div class="col-12 col-md-6 d-none d-md-block">
-                    <div class="m-my-4">
-                        <p class="display-2 font-weight-bold">UM NOVO PORTAL SE ABRE</p>
-                        <p class="sub-text-form">Conecte-se com outros profissionais, compartilhe suas técnicas
-                        e encontre novas oportunidades de trabalho. Contrariamente é uma plataforma completa
-                        para profissionais e empresários da área da beleza e estética.</p>
-                    </div>
+
                 </div>
                 <div class="col-12 col-md-5 offset-md-1">
                     <div>
-                        <div class="pt-md-3 d-flex justify-content-center align-items-center">
-                            <img src="/img/pixelfed-icon-color.svg" loading="lazy" width="50px" height="50px">
-                            <span class="font-weight-bold h3 ml-2 pt-2" style="color: #6a1ae8;">Contrariamente</span>
+
+                        <div class="m-my-4" id="text-primary-form">
+                            <p class="display-2 font-weight-bold" id="title-portal">UM NOVO PORTAL SE ABRE</p>
+                            <p class="sub-text-form">Conecte-se com outros profissionais, compartilhe suas técnicas
+                                e encontre novas oportunidades de trabalho. Contrariamente é uma plataforma completa
+                                para profissionais e empresários da área da beleza e estética.</p>
                         </div>
                         <div class="d-block d-md-none">
                             <p class="font-weight-bold mb-0 text-center">Photo Sharing. For Everyone</p>
                         </div>
-                        <div class="card my-4 shadow-none border">
+                        <div class="card my-4 shadow-none border" id="card-form-login">
                             <div class="card-body px-lg-5">
-                                <div class="text-center">
-                                    <p class="small text-uppercase font-weight-bold text-muted">{{ __('Account Login') }}</p>
-                                </div>
+
                                 <div>
                                     <form class="px-1" method="POST" action="{{ route('login') }}" id="login_form">
                                         @csrf
@@ -78,9 +77,9 @@
                                                 <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="{{__('Email')}}" required autofocus>
 
                                                 @if ($errors->has('email'))
-                                                    <span class="invalid-feedback">
-                                                        <strong>{{ $errors->first('email') }}</strong>
-                                                    </span>
+                                                <span class="invalid-feedback">
+                                                    <strong>{{ $errors->first('email') }}</strong>
+                                                </span>
                                                 @endif
                                             </div>
                                         </div>
@@ -88,12 +87,12 @@
                                         <div class="form-group row">
 
                                             <div class="col-md-12">
-                                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{__('Password')}}" required>
+                                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{__('Senha')}}" required>
 
                                                 @if ($errors->has('password'))
-                                                    <span class="invalid-feedback">
-                                                        <strong>{{ $errors->first('password') }}</strong>
-                                                    </span>
+                                                <span class="invalid-feedback">
+                                                    <strong>{{ $errors->first('password') }}</strong>
+                                                </span>
                                                 @endif
                                             </div>
                                         </div>
@@ -104,11 +103,13 @@
                                                     <label>
                                                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
                                                         <span class="font-weight-bold small ml-1 text-muted">
-                                                            {{ __('Remember Me') }}
+                                                            {{ __('Lembrar') }}
                                                         </span>
                                                     </label>
                                                 </div>
                                             </div>
+
+
                                         </div>
                                         @if(config('captcha.enabled'))
                                         <div class="d-flex justify-content-center mb-3">
@@ -117,30 +118,35 @@
                                         @endif
                                         <div class="form-group row mb-0">
                                             <div class="col-md-12">
-                                                <button type="submit" class="btn btn-primary btn-block py-0 font-weight-bold text-uppercase">
+                                                <button type="submit" class="btn btn-primary btn-block py-0 font-weight-bold text-uppercase" id="btn-login">
                                                     {{ __('Login') }}
                                                 </button>
-
+                                            </div>
+                                            <div class="card shadow-none border card-body" id="card-form-login">
+                                                <p class="text-center mb-0 font-weight-bold small">
+                                                    @if(config('pixelfed.open_registration'))
+                                                    <a href="/register">{{ __('Cadastre-se') }}</a>
+                                                    <span class="px-1">/</span>
+                                                    @endif
+                                                    <a href="/password/reset">{{ __('Esqueci minha senha') }}</a>
+                                                </p>
+                                            </div>
+                                            <div class="pt-md-3 d-flex justify-content-center align-items-center" id="logoandtext-contra">
+                                                <img src="/img/pixelfed-icon-color.svg" loading="lazy" width="30px" height="50px">
+                                                <span class="font-weight-bold h3 ml-2 pt-2" style="color: #6a1ae8;">Contrariamente</span>
                                             </div>
                                         </div>
-                                    </form>
                                 </div>
+                                </form>
                             </div>
                         </div>
-                        <div class="card shadow-none border card-body">
-                            <p class="text-center mb-0 font-weight-bold small">
-                                @if(config('pixelfed.open_registration'))
-                                <a href="/register">{{ __('Register') }}</a>
-                                <span class="px-1">·</span>
-                                @endif
-                                <a href="/password/reset">{{ __('Password Reset') }}</a>
-                            </p>
-                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
     </main>
-    @include('layouts.partial.footer')
+
 </body>
+
 </html>
