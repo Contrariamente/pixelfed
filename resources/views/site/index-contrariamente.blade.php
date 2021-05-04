@@ -45,15 +45,15 @@
     </style>
 </head>
 
-<body class="">
+<body class="body-login">
     <main id="content">
-        <section class="container">
+        <section class="container container-total">
             <div class="section-spacer"></div>
             <div class="row pt-md-5 mt-5" id="div-total">
                 <div class="col-12 col-md-6 d-none d-md-block">
-
+              
                 </div>
-                <div class="col-12 col-md-5 offset-md-1">
+                <div class="col-12 col-md-5 offset-md-1" id="backgroud-login">
                     <div>
 
                         <div class="m-my-4" id="text-primary-form">

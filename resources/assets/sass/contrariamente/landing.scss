@@ -1,3 +1,4 @@
+
 #text-primary-form{
     font-size: 18px;
     text-align: center;
@@ -33,4 +34,17 @@
 }
 .div-total{
     padding-top: unset !important;
+}
+.img-left-form{
+    width: 124%;
+}
+.body-login{
+  background-size: 100em;
+  background-repeat: no-repeat;
+    background-image: url("/workspace/pixelfed/public/img/Tela-01-Background.png");
+}
+@media (min-width: 768px){
+.offset-md-1 {
+    margin-left: 62% !important;
+}
 }
