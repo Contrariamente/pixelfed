@@ -45,26 +45,28 @@
     </style>
 </head>
 
-<body class="body-login">
+<body>
     <main id="content">
-        <section class="container container-total">
-            <div class="section-spacer"></div>
+<section class="container-1">
+        <section class="container">
+            <div class="section-spacer section-espaco-top"></div>
             <div class="row pt-md-5 mt-5" id="div-total">
                 <div class="col-12 col-md-6 d-none d-md-block">
               
                 </div>
                 <div class="col-12 col-md-5 offset-md-1" id="backgroud-login">
                     <div>
-
+                    <div class="pt-md-3 d-flex justify-content-center align-items-center" id="logoandtext-contra">
+                                                <img src="/img/pixelfed-icon-color.svg" loading="lazy" width="30px" height="50px">
+                                                <span class="font-weight-bold h3 ml-2 pt-2" style="color: #6a1ae8;">Contrariamente</span>
+                                            </div>
                         <div class="m-my-4" id="text-primary-form">
                             <p class="display-2 font-weight-bold" id="title-portal">UM NOVO PORTAL SE ABRE</p>
                             <p class="sub-text-form">Conecte-se com outros profissionais, compartilhe suas técnicas
                                 e encontre novas oportunidades de trabalho. Contrariamente é uma plataforma completa
                                 para profissionais e empresários da área da beleza e estética.</p>
                         </div>
-                        <div class="d-block d-md-none">
-                            <p class="font-weight-bold mb-0 text-center">Photo Sharing. For Everyone</p>
-                        </div>
+                     
                         <div class="card my-4 shadow-none border" id="card-form-login">
                             <div class="card-body px-lg-5">
 
@@ -131,10 +133,7 @@
                                                     <a href="/password/reset">{{ __('Esqueci minha senha') }}</a>
                                                 </p>
                                             </div>
-                                            <div class="pt-md-3 d-flex justify-content-center align-items-center" id="logoandtext-contra">
-                                                <img src="/img/pixelfed-icon-color.svg" loading="lazy" width="30px" height="50px">
-                                                <span class="font-weight-bold h3 ml-2 pt-2" style="color: #6a1ae8;">Contrariamente</span>
-                                            </div>
+                                           
                                         </div>
                                 </div>
                                 </form>
@@ -144,6 +143,7 @@
                     </div>
                 </div>
             </div>
+        </section>
         </section>
     </main>
 
