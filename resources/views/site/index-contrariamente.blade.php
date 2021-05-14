@@ -24,6 +24,7 @@
     <link rel="shortcut icon" type="image/png" href="/img/favicon.png?v=2">
     <link rel="apple-touch-icon" type="image/png" href="/img/favicon.png?v=2">
     <link href="{{ mix('css/landing.css') }}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <style type="text/css">
         .feature-circle {
             display: flex !important;
@@ -145,8 +146,64 @@
             </div>
         </section>
         </section>
+        <section class="container-02">
+        <section class="container" id="container-total02">
+        <div class="separador02"></div>
+
+        <div class="row pt-md-5 mt-5" id="div-total">
+                <div class="col-12 col-md-6 d-none d-md-block">
+              
+                </div>
+                <div class="col-12 col-md-5 offset-md-1" id="section-video">
+                    <div class="content-descricao descricao-select">
+                        <a href="#">PORTAL DE DESCOBERTAS</a>
+                        <p class="c-descricao select-d">Encontre novas oportunidades de trabalho ou profissionais para contratar.</p>
+                  
+                    </div>
+
+                        
+                    <div class="content-descricao">
+                        <a href="#">OPORTUNIDADE DOS SONHOS</a>
+                        <p class="c-descricao">Encontre as melhores empresas para trabalhar com o que você ama.</p>
+                        <br>
+                        </div>
+
+                        <div class="content-descricao">
+                        <a href="#">+ CONTEÚDOS + NEGÓCIOS</a>
+                        <p class="c-descricao">Compartilhe seus trabalhos, técnicas e novas experiências com sua rede de 
+                        contato, atraia novos profissionais e contratantes.</p>
+                        <br>
+                        </div>
+
+                        <div class="content-descricao">
+                        <a href="#">AJUDE A COMUNIDADE</a>
+                        <p class="c-descricao">Avalie e indique empresas e profissionais para outros usuários.</p>
+                        <br>
+                        </div>
+
+                        <div class="content-descricao">
+                        <a href="#">NETWORK SEM IGUAL</a>
+                        <p class="c-descricao">Conecte-se a outros estabelecimentos e profissionais para aumentar
+                        sua rede profissional.</p>
+                        </div>
+                    
+                   <button id="botao">teste</button>
+    
+                     
+
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+        </section>
     </main>
 
 </body>
 
 </html>
+@push('scripts')
+<script type="text/javascript" src="/resources/assets/js/contrariamente/landing.js">
+</script>
+@endpush
