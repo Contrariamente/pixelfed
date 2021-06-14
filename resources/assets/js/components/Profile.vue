@@ -13,7 +13,7 @@
 				<i class="fas fa-chevron-left fa-lg"></i>
 			</div>
 			<div class="font-weight-bold">
-				{{this.profileUsername}}								
+				{{this.profileUsername}}
 
 			</div>
 			<div>
@@ -103,10 +103,6 @@
 							<div class="profile-details">
 								<div class="d-none d-md-flex username-bar pb-3 align-items-center">
 									<span class="font-weight-ultralight h3 mb-0">{{profile.username}}</span>
-									<span class="pl-1 pb-2 fa-stack" v-if="profile.is_admin" title="Admin Account" data-toggle="tooltip">
-										<i class="fas fa-certificate fa-lg text-danger fa-stack-1x"></i>
-										<i class="fas fa-crown text-white fa-sm fa-stack-1x" style="font-size:9px;"></i>
-									</span>
 									<span v-if="profile.id != user.id && user.hasOwnProperty('id')">
 										<span class="pl-4" v-if="relationship.following == true">
 											<a :href="'/account/direct/t/'+profile.id"  class="btn btn-outline-secondary font-weight-bold btn-sm py-1 text-dark mr-2 px-3 btn-sec-alt" style="border:1px solid #dbdbdb;" data-toggle="tooltip" title="Message">Message</a>
@@ -121,7 +117,7 @@
 									</span>
 									<span class="pl-4">
 										<a class="fas fa-ellipsis-h fa-lg text-dark text-decoration-none" href="#" @click.prevent="visitorMenu"></a>
-									</span> 
+									</span>
 								</div>
 								<div class="font-size-16px">
 									<div class="d-none d-md-inline-flex profile-stats pb-3">
@@ -144,11 +140,21 @@
 											</a>
 										</div>
 									</div>
-									<p class="mb-0 d-flex align-items-center">
-										<span class="font-weight-bold pr-3">{{profile.display_name}}</span>
+									<p class="d-flex align-items-center mb-1">
+										<span class="font-weight-bold mr-1">{{profile.display_name}}</span>
+										<span v-if="profile.pronouns" class="text-muted small">{{profile.pronouns.join('/')}}</span>
 									</p>
-									<div v-if="profile.note" class="mb-0" v-html="profile.note"></div>
-									<p v-if="profile.website" class=""><a :href="profile.website" class="profile-website" rel="me external nofollow noopener" target="_blank" @click.prevent="remoteRedirect(profile.website)">{{truncate(profile.website,24)}}</a></p>
+									<p v-if="profile.note" class="mb-0" v-html="profile.note"></p>
+									<p v-if="profile.website"><a :href="profile.website" class="profile-website small" rel="me external nofollow noopener" target="_blank" @click.prevent="remoteRedirect(profile.website)">{{formatWebsite(profile.website)}}</a></p>
+									<p class="d-flex small text-muted align-items-center">
+										<span v-if="profile.is_admin" class="btn btn-outline-danger btn-sm py-0 mr-3" title="Admin Account" data-toggle="tooltip">
+											Admin
+										</span>
+										<span v-if="relationship && relationship.followed_by" class="btn btn-outline-muted btn-sm py-0 mr-3">Follows You</span>
+										<span>
+											Joined {{joinedAtFormat(profile.created_at)}}
+										</span>
+									</p>
 								</div>
 							</div>
 						</div>
@@ -199,7 +205,7 @@
 											/>
 									</div>
 									<div v-else class="square-content">
-										
+
 										<blur-hash-image
 											width="32"
 											height="32"
@@ -212,10 +218,6 @@
 									<span v-if="s.pf_type == 'video:album'" class="float-right mr-3 post-icon"><i class="fas fa-film fa-2x"></i></span>
 									<div class="info-overlay-text">
 										<h5 class="text-white m-auto font-weight-bold">
-											<span>
-												<span class="far fa-heart fa-lg p-2 d-flex-inline"></span>
-												<span class="d-flex-inline">{{formatCount(s.favourites_count)}}</span>
-											</span>
 											<span>
 												<span class="far fa-comment fa-lg p-2 d-flex-inline"></span>
 												<span class="d-flex-inline">{{formatCount(s.reply_count)}}</span>
@@ -260,10 +262,6 @@
 											</div>
 											<div class="info-overlay-text">
 												<h5 class="text-white m-auto font-weight-bold">
-													<span>
-														<span class="far fa-heart fa-lg p-2 d-flex-inline"></span>
-														<span class="d-flex-inline">{{s.favourites_count}}</span>
-													</span>
 													<span>
 														<span class="fas fa-retweet fa-lg p-2 d-flex-inline"></span>
 														<span class="d-flex-inline">{{s.reblogs_count}}</span>
@@ -395,6 +393,7 @@
 			</div>
 		</div>
 	</div>
+
 	<b-modal
 		v-if="profile && following"
 		ref="followingModal"
@@ -424,12 +423,12 @@
 			</div>
 			<div class="list-group-item border-0 py-1" v-for="(user, index) in following" :key="'following_'+index">
 				<div class="media">
-					<a :href="user.url">
+					<a :href="profileUrlRedirect(user)">
 						<img class="mr-3 rounded-circle box-shadow" :src="user.avatar" :alt="user.username + '’s avatar'" width="30px" loading="lazy">
 					</a>
 					<div class="media-body text-truncate">
 						<p class="mb-0" style="font-size: 14px">
-							<a :href="user.url" class="font-weight-bold text-dark">
+							<a :href="profileUrlRedirect(user)" class="font-weight-bold text-dark">
 								{{user.username}}
 							</a>
 						</p>
@@ -471,12 +470,12 @@
 			</div>
 			<div class="list-group-item border-0 py-1" v-for="(user, index) in followers" :key="'follower_'+index">
 				<div class="media mb-0">
-					<a :href="user.url">
+					<a :href="profileUrlRedirect(user)">
 						<img class="mr-3 rounded-circle box-shadow" :src="user.avatar" :alt="user.username + '’s avatar'" width="30px" height="30px" loading="lazy">
 					</a>
 					<div class="media-body mb-0">
 						<p class="mb-0" style="font-size: 14px">
-							<a :href="user.url" class="font-weight-bold text-dark">
+							<a :href="profileUrlRedirect(user)" class="font-weight-bold text-dark">
 								{{user.username}}
 							</a>
 						</p>
@@ -707,7 +706,7 @@
 			if(forceMetro == true || u.has('ui') && u.get('ui') == 'metro' && this.layout != 'metro') {
 				this.layout = 'metro';
 			}
-			
+
 			if(this.layout == 'metro' && u.has('t')) {
 				if(this.modes.indexOf(u.get('t')) != -1) {
 					if(u.get('t') == 'bookmarks') {
@@ -813,7 +812,7 @@
 							if(self.ids.indexOf(d.id) == -1) {
 								self.timeline.push(d);
 								self.ids.push(d.id);
-							} 
+							}
 						});
 						let max = Math.min(...this.ids);
 						if(max == this.max_id) {
@@ -1180,7 +1179,6 @@
 				});
 			},
 
-
 			followersLoadMore() {
 				if($('body').hasClass('loggedIn') == false) {
 					return;
@@ -1280,6 +1278,14 @@
 				return '/i/web/profile/_/' + status.account.id;
 			},
 
+			profileUrlRedirect(profile) {
+				if(profile.local == true) {
+					return profile.url;
+				}
+
+				return '/i/web/profile/_/' + profile.id;
+			},
+
 			showEmbedProfileModal() {
 				this.ctxEmbedPayload = window.App.util.embed.profile(this.profile.url);
 				this.$refs.visitorContextMenu.hide();
@@ -1305,8 +1311,8 @@
 					this.followingModalSearch = null;
 				}
 				if(q.length > 0) {
-					let url = '/api/pixelfed/v1/accounts/' + 
-						self.profileId + '/following?page=1&fbu=' + 
+					let url = '/api/pixelfed/v1/accounts/' +
+						self.profileId + '/following?page=1&fbu=' +
 						q;
 
 					axios.get(url).then(res => {
@@ -1322,6 +1328,24 @@
 				return _.truncate(str, {
 					length: len
 				});
+			},
+
+			formatWebsite(site) {
+				if(site.slice(0, 8) === 'https://') {
+					site = site.substr(8);
+				} else if(site.slice(0, 7) === 'http://') {
+					site = site.substr(7);
+				} else {
+					this.profile.website = null;
+					return;
+				}
+
+				return this.truncate(site, 60);
+			},
+
+			joinedAtFormat(created) {
+				let d = new Date(created);
+				return d.toDateString();
 			}
 		}
 	}

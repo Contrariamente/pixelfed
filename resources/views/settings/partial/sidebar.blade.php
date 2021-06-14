@@ -16,7 +16,7 @@
       @endif
       <li class="nav-item pl-3 {{request()->is('settings/notifications')?'active':''}}">
         <a class="nav-link font-weight-light text-muted" href="{{route('settings.notifications')}}">Notifications</a>
-      </li> 
+      </li>
       <li class="nav-item pl-3 {{request()->is('settings/password')?'active':''}}">
         <a class="nav-link font-weight-light text-muted" href="{{route('settings.password')}}">Password</a>
       </li>
@@ -26,20 +26,13 @@
       <li class="nav-item pl-3 {{request()->is('settings/relationships*')?'active':''}}">
         <a class="nav-link font-weight-light text-muted" href="{{route('settings.relationships')}}">Relationships</a>
       </li>
-      <li class="nav-item pl-3 {{request()->is('settings/reports*')?'active':''}}">
-        <a class="nav-link font-weight-light text-muted" href="{{route('settings.reports')}}">Reports</a>
-      </li>
-  
       <li class="nav-item pl-3 {{request()->is('settings/security*')?'active':''}}">
         <a class="nav-link font-weight-light text-muted" href="{{route('settings.security')}}">Security</a>
       </li>
-      {{-- <li class="nav-item pl-3 {{request()->is('settings/sponsor*')?'active':''}}">
-        <a class="nav-link font-weight-light text-muted" href="{{route('settings.sponsor')}}">Sponsor</a>
-      </li> --}}
       <li class="nav-item">
         <hr>
       </li>
-      @if(config('pixelfed.import.instagram.enabled'))
+      @if(config_cache('pixelfed.import.instagram.enabled'))
       <li class="nav-item pl-3 {{request()->is('*import*')?'active':''}}">
         <a class="nav-link font-weight-light text-muted" href="{{route('settings.import')}}">Import</a>
       </li>
@@ -47,8 +40,8 @@
       <li class="nav-item pl-3 {{request()->is('settings/data-export')?'active':''}}">
         <a class="nav-link font-weight-light text-muted" href="{{route('settings.dataexport')}}">Data Export</a>
       </li>
-      
-      @if(config('pixelfed.oauth_enabled') == true)
+
+      @if(config_cache('pixelfed.oauth_enabled') == true)
       <li class="nav-item">
       <hr>
       </li>

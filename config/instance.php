@@ -2,7 +2,7 @@
 
 return [
 
-	'description' => env('INSTANCE_DESCRIPTION', null),
+	'description' => env('INSTANCE_DESCRIPTION', 'Pixelfed - Photo sharing for everyone'),
 
 	'contact' => [
 		'enabled' => env('INSTANCE_CONTACT_FORM', false),
@@ -18,7 +18,7 @@ return [
 			'is_public' => env('INSTANCE_PUBLIC_HASHTAGS', false)
 		],
 	],
-	
+
 	'email' => env('INSTANCE_CONTACT_EMAIL'),
 
 	'timeline' => [
@@ -72,4 +72,6 @@ return [
 			'org' => env('COVID_LABEL_ORG', 'visit the WHO website')
 		]
 	],
+
+	'enable_cc' => env('ENABLE_CONFIG_CACHE', false)
 ];

@@ -6,6 +6,7 @@ use DB, Cache, Purify, Storage, Request, Validator;
 use App\{
 	Activity,
 	Follower,
+	Instance,
 	Like,
 	Media,
 	Notification,
@@ -25,6 +26,7 @@ use App\Util\ActivityPub\HttpSignature;
 use Illuminate\Support\Str;
 use App\Services\ActivityPubFetchService;
 use App\Services\ActivityPubDeliveryService;
+use App\Services\InstanceService;
 use App\Services\MediaPathService;
 use App\Services\MediaStorageService;
 use App\Jobs\MediaPipeline\MediaStoragePipeline;
@@ -61,7 +63,7 @@ class Helpers {
 
 		$activity = $data['object'];
 
-		$mimeTypes = explode(',', config('pixelfed.media_types'));
+		$mimeTypes = explode(',', config_cache('pixelfed.media_types'));
 		$mediaTypes = in_array('video/mp4', $mimeTypes) ? ['Document', 'Image', 'Video'] : ['Document', 'Image'];
 
 		if(!isset($activity['attachment']) || empty($activity['attachment'])) {
@@ -161,18 +163,26 @@ class Helpers {
 
 			$host = parse_url($valid, PHP_URL_HOST);
 
-			if(count(dns_get_record($host, DNS_A | DNS_AAAA)) == 0) {
-				return false;
-			}
+			// if(count(dns_get_record($host, DNS_A | DNS_AAAA)) == 0) {
+			// 	return false;
+			// }
 
 			if(config('costar.enabled') == true) {
 				if(
-					(config('costar.domain.block') != null && Str::contains($host, config('costar.domain.block')) == true) || 
+					(config('costar.domain.block') != null && Str::contains($host, config('costar.domain.block')) == true) ||
 					(config('costar.actor.block') != null && in_array($url, config('costar.actor.block')) == true)
 				) {
 					return false;
 				}
 			}
+
+			if(app()->environment() === 'production') {
+				$bannedInstances = InstanceService::getBannedDomains();
+				if(in_array($host, $bannedInstances)) {
+					return false;
+				}
+			}
+
 
 			if(in_array($host, $localhosts)) {
 				return false;
@@ -257,7 +267,7 @@ class Helpers {
 		}
 
 		$res = self::fetchFromUrl($url);
-		
+
 		if(!$res || empty($res) || isset($res['error']) ) {
 			return;
 		}
@@ -269,7 +279,7 @@ class Helpers {
 		}
 
 		$scope = 'private';
-		
+
 		$cw = isset($res['sensitive']) ? (bool) $res['sensitive'] : false;
 
 		if(isset($res['to']) == true) {
@@ -312,12 +322,13 @@ class Helpers {
 			$cwDomains = config('costar.domain.cw');
 			if(in_array(parse_url($url, PHP_URL_HOST), $cwDomains) == true) {
 				$cw = true;
-			} 
+			}
 		}
 
 		$id = isset($res['id']) ? $res['id'] : $url;
 		$idDomain = parse_url($id, PHP_URL_HOST);
 		$urlDomain = parse_url($url, PHP_URL_HOST);
+
 
 		if(!self::validateUrl($id)) {
 			return;
@@ -347,16 +358,24 @@ class Helpers {
 		}
 		$ts = is_array($res['published']) ? $res['published'][0] : $res['published'];
 
+		if($scope == 'public' && in_array($urlDomain, InstanceService::getUnlistedDomains())) {
+			$scope = 'unlisted';
+		}
+
+		if(in_array($urlDomain, InstanceService::getNsfwDomains())) {
+			$cw = true;
+		}
+
 		$statusLockKey = 'helpers:status-lock:' . hash('sha256', $res['id']);
 		$status = Cache::lock($statusLockKey)
 			->get(function () use(
-				$profile, 
-				$res, 
-				$url, 
-				$ts, 
-				$reply_to, 
-				$cw, 
-				$scope, 
+				$profile,
+				$res,
+				$url,
+				$ts,
+				$reply_to,
+				$cw,
+				$scope,
 				$id
 		) {
 			return DB::transaction(function() use($profile, $res, $url, $ts, $reply_to, $cw, $scope, $id) {
@@ -399,7 +418,7 @@ class Helpers {
 		$attachments = isset($data['object']) ? $data['object']['attachment'] : $data['attachment'];
 		$user = $status->profile;
 		$storagePath = MediaPathService::get($user, 2);
-		$allowed = explode(',', config('pixelfed.media_types'));
+		$allowed = explode(',', config_cache('pixelfed.media_types'));
 
 		foreach($attachments as $media) {
 			$type = $media['mediaType'];
@@ -422,11 +441,11 @@ class Helpers {
 			$media->version = 3;
 			$media->save();
 
-			if(config('pixelfed.cloud_storage') == true) {
+			if(config_cache('pixelfed.cloud_storage') == true) {
 				MediaStoragePipeline::dispatch($media);
 			}
 		}
-		
+
 		$status->viewType();
 		return;
 	}
@@ -472,24 +491,27 @@ class Helpers {
 
 			$profile = Profile::whereRemoteUrl($res['id'])->first();
 			if(!$profile) {
+				Instance::firstOrCreate([
+					'domain' => $domain
+				]);
 				$profileLockKey = 'helpers:profile-lock:' . hash('sha256', $res['id']);
 				$profile = Cache::lock($profileLockKey)->get(function () use($domain, $webfinger, $res, $runJobs) {
 					return DB::transaction(function() use($domain, $webfinger, $res, $runJobs) {
 						$profile = new Profile();
 						$profile->domain = strtolower($domain);
-						$profile->username = strtolower(Purify::clean($webfinger));
+						$profile->username = Purify::clean($webfinger);
 						$profile->name = isset($res['name']) ? Purify::clean($res['name']) : 'user';
 						$profile->bio = isset($res['summary']) ? Purify::clean($res['summary']) : null;
 						$profile->sharedInbox = isset($res['endpoints']) && isset($res['endpoints']['sharedInbox']) ? $res['endpoints']['sharedInbox'] : null;
-						$profile->inbox_url = strtolower($res['inbox']);
-						$profile->outbox_url = strtolower($res['outbox']);
-						$profile->remote_url = strtolower($res['id']);
+						$profile->inbox_url = $res['inbox'];
+						$profile->outbox_url = $res['outbox'];
+						$profile->remote_url = $res['id'];
 						$profile->public_key = $res['publicKey']['publicKeyPem'];
 						$profile->key_id = $res['publicKey']['id'];
-						$profile->webfinger = strtolower(Purify::clean($webfinger));
+						$profile->webfinger = Purify::clean($webfinger);
 						$profile->last_fetched_at = now();
 						$profile->save();
-						if(config('pixelfed.cloud_storage') == true) {
+						if(config_cache('pixelfed.cloud_storage') == true) {
 							RemoteAvatarFetch::dispatch($profile);
 						}
 						return $profile;
@@ -497,7 +519,7 @@ class Helpers {
 				});
 			} else {
 				// Update info after 24 hours
-				if($profile->last_fetched_at == null || 
+				if($profile->last_fetched_at == null ||
 				   $profile->last_fetched_at->lt(now()->subHours(24)) == true
 				) {
 					$profile->name = isset($res['name']) ? Purify::clean($res['name']) : 'user';
@@ -506,7 +528,7 @@ class Helpers {
 					$profile->sharedInbox = isset($res['endpoints']) && isset($res['endpoints']['sharedInbox']) && Helpers::validateUrl($res['endpoints']['sharedInbox']) ? $res['endpoints']['sharedInbox'] : null;
 					$profile->save();
 				}
-				if(config('pixelfed.cloud_storage') == true) {
+				if(config_cache('pixelfed.cloud_storage') == true) {
 					RemoteAvatarFetch::dispatch($profile);
 				}
 			}

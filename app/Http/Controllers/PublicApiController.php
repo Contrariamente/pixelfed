@@ -12,6 +12,7 @@ use App\{
     Profile,
     StatusHashtag,
     Status,
+    StatusView,
     UserFilter
 };
 use Auth,Cache;
@@ -199,9 +200,15 @@ class PublicApiController extends Controller
 
     public function statusLikes(Request $request, $username, $id)
     {
-        $profile = Profile::whereUsername($username)->whereNull('status')->firstOrFail();
-        $status = Status::whereProfileId($profile->id)->findOrFail($id);
-        $this->scopeCheck($profile, $status);
+    	abort_if(!$request->user(), 404);
+        $status = Status::findOrFail($id);
+        $this->scopeCheck($status->profile, $status);
+        $page = $request->input('page');
+        if($page && $page >= 3 && $request->user()->profile_id != $status->profile_id) {
+        	return response()->json([
+        		'data' => []
+        	]);
+        }
         $likes = $this->getLikes($status);
         return response()->json([
             'data' => $likes
@@ -210,9 +217,16 @@ class PublicApiController extends Controller
 
     public function statusShares(Request $request, $username, $id)
     {
+    	abort_if(!$request->user(), 404);
         $profile = Profile::whereUsername($username)->whereNull('status')->firstOrFail();
         $status = Status::whereProfileId($profile->id)->findOrFail($id);
         $this->scopeCheck($profile, $status);
+        $page = $request->input('page');
+        if($page && $page >= 3 && $request->user()->profile_id != $status->profile_id) {
+        	return response()->json([
+        		'data' => []
+        	]);
+        }
         $shares = $this->getShares($status);
         return response()->json([
             'data' => $shares
@@ -314,7 +328,7 @@ class PublicApiController extends Controller
                       ->whereNotIn('profile_id', $filtered)
                       ->whereLocal(true)
                       ->whereScope('public')
-                      ->where('created_at', '>', now()->subMonths(3))
+                      ->where('created_at', '>', now()->subMonths(6))
                       ->orderBy('created_at', 'desc')
                       ->limit($limit)
                       ->get();
@@ -343,7 +357,7 @@ class PublicApiController extends Controller
                       ->with('profile', 'hashtags', 'mentions')
                       ->whereLocal(true)
                       ->whereScope('public')
-                      ->where('created_at', '>', now()->subMonths(3))
+                      ->where('created_at', '>', now()->subMonths(6))
                       ->orderBy('created_at', 'desc')
                       ->simplePaginate($limit);
         }
@@ -363,9 +377,13 @@ class PublicApiController extends Controller
           'page'        => 'nullable|integer|max:40',
           'min_id'      => 'nullable|integer|min:0|max:' . PHP_INT_MAX,
           'max_id'      => 'nullable|integer|min:0|max:' . PHP_INT_MAX,
-          'limit'       => 'nullable|integer|max:40'
+          'limit'       => 'nullable|integer|max:40',
+          'recent_feed' => 'nullable',
+          'recent_min'  => 'nullable|integer'
         ]);
 
+        $recentFeed = $request->input('recent_feed') == 'true';
+        $recentFeedMin = $request->input('recent_min');
         $page = $request->input('page');
         $min = $request->input('min_id');
         $max = $request->input('max_id');
@@ -380,29 +398,21 @@ class PublicApiController extends Controller
             return;
         });
 
-        // TODO: Use redis for timelines
-        // $timeline = Timeline::build()->local();
-        $pid = Auth::user()->profile->id;
+        $pid = Auth::user()->profile_id;
 
         $following = Cache::remember('profile:following:'.$pid, now()->addMinutes(1440), function() use($pid) {
             $following = Follower::whereProfileId($pid)->pluck('following_id');
             return $following->push($pid)->toArray();
         });
 
-        // $private = Cache::remember('profiles:private', now()->addMinutes(1440), function() {
-        //     return Profile::whereIsPrivate(true)
-        //         ->orWhere('unlisted', true)
-        //         ->orWhere('status', '!=', null)
-        //         ->pluck('id');
-        // });
-
-        // $private = $private->diff($following)->flatten();
-
-        // $filters = UserFilter::whereUserId($pid)
-        //           ->whereFilterableType('App\Profile')
-        //           ->whereIn('filter_type', ['mute', 'block'])
-        //           ->pluck('filterable_id')->toArray();
-        // $filtered = array_merge($private->toArray(), $filters);
+        if($recentFeed == true) {
+			$key = 'profile:home-timeline-cursor:'.$user->id;
+			$ttl = now()->addMinutes(30);
+			$min = Cache::remember($key, $ttl, function() use($pid) {
+        		$res = StatusView::whereProfileId($pid)->orderByDesc('status_id')->first();
+        		return $res ? $res->status_id : null;
+			});
+        }
 
         $filtered = Auth::check() ? UserFilterService::filters(Auth::user()->profile_id) : [];
 
