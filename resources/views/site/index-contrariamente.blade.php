@@ -48,7 +48,7 @@
 <body>
     <main id="content">
 <section class="container-1">
-        <section class="container">
+        <section class="container container-geral">
             <div class="section-spacer section-espaco-top"></div>
             <div class="row pt-md-5 mt-5" id="div-total">
                 <div class="col-12 col-md-6 d-none d-md-block">
@@ -152,7 +152,7 @@
         <section class="container" id="container-total03">
       
         <div class="row pt-md-5 mt-5" id="div-total">
-                <div class="col-12 col-md-6 d-none d-md-block">
+                <div class="col-12 col-md-6 d-md-block">
                 <div class="section-03-l01">
                 <h1>
              CONECTE-SE<br>

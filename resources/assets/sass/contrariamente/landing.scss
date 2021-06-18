@@ -225,3 +225,109 @@
 #foto-bg{
     max-width: 40em;
 }
+@media (max-width: 768px){
+    #section-depoimentos{
+        margin-top: 12em;
+    }
+    #foto-bg{
+        max-width: 19em;
+        display: none;
+    }
+    .img-logo-photo{
+        max-width: 285px;
+    }
+    .depoimento-top {
+        margin-top: 7em;
+        max-width: 400px;
+        margin: auto;
+    }
+    .titulo-name{
+        max-width: 317px;
+        font-size: 15px;
+        text-align: inherit;
+    }
+    .titulo-name p{
+        margin-bottom: -11px;
+    }
+    .titulo-name span{
+        font-size: 11px;
+        margin-left: 21px;
+    }
+    #img-depoimento{
+        margin-top: -44em;
+        float: none;
+        width: 13em;
+        height: 13em;
+        margin-left: 5em;
+    }
+    #img-depoimento-02{
+        float: none;
+        width: 13em;
+        height: 13em;
+        margin-left: 5em;
+    }
+    .text-depoimento{
+        max-width: 367px;
+        height: 13em;
+        font-size: 13px;
+    }
+    .text-depoimento p {
+        padding: 9px;
+    }
+    .nova-forma-div{
+        margin-top: 1em;
+    }
+    .text-depoimento-bottom{
+        max-width: 367px;
+        height: 11em;
+        font-size: 13px;
+        margin-left: unset;
+    }
+    .text-depoimento-bottom p {
+        padding: 9px;
+    }
+    .titulo-name-02{
+        max-width: 317px;
+        font-size: 15px;
+        text-align: inherit;
+        margin-top: 2.1em;
+    }
+ 
+    #forma-a {
+        margin-top: -12em;
+    }
+    #btn-cadastro{
+        width: 79%;
+    }
+    .nova-oportunidade {
+        margin-left: -1em;
+        margin-top: 6em;
+    }
+    .nova-oportunidade h1{
+        font-size: 31px;
+    }
+    .section-03-l01{
+        margin-top: -5em;
+    }
+}
+@media (max-width: 998px){
+    .container-geral{
+        max-width: 917px;
+        width: 110%;
+    }
+    .section-03-l02{
+        margin-left: 15em;
+    }
+    #forma-a {
+        margin-top: -1em;
+    }
+    .nova-oportunidade {
+        margin-left: -15em;
+    }
+    .img-logo-photo{
+        max-width: 530px;
+    }
+    #btn-cadastro{
+        width: 25%;
+    }
+}
