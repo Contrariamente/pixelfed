@@ -1,7 +1,7 @@
 {
   "name": "Pixelfed",
   "short_name": "Pixelfed",
-  "start_url": ".",
+  "start_url": "/?source=pwa",
   "display": "standalone",
   "theme_color": "#6a1ae8",
   "background_color": "#f5f8fa",

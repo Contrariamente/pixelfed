@@ -45,6 +45,7 @@ use App\Services\ServiceService;
 use Illuminate\Support\Str;
 use App\Util\Lexer\Autolink;
 use App\Util\Lexer\Extractor;
+use App\Util\Media\License;
 
 class ComposeController extends Controller
 {
@@ -70,8 +71,8 @@ class ComposeController extends Controller
 			'file.*' => function() {
 				return [
 					'required',
-					'mimes:' . config('pixelfed.media_types'),
-					'max:' . config('pixelfed.max_photo_size'),
+					'mimes:' . config_cache('pixelfed.media_types'),
+					'max:' . config_cache('pixelfed.max_photo_size'),
 				];
 			},
 			'filter_name' => 'nullable|string|max:24',
@@ -91,11 +92,11 @@ class ComposeController extends Controller
 
 		abort_if($limitReached == true, 429);
 
-		if(config('pixelfed.enforce_account_limit') == true) {
+		if(config_cache('pixelfed.enforce_account_limit') == true) {
 			$size = Cache::remember($user->storageUsedKey(), now()->addDays(3), function() use($user) {
 				return Media::whereUserId($user->id)->sum('size') / 1000;
-			}); 
-			$limit = (int) config('pixelfed.max_account_size');
+			});
+			$limit = (int) config_cache('pixelfed.max_account_size');
 			if ($size >= $limit) {
 				abort(403, 'Account size limit reached.');
 			}
@@ -106,7 +107,7 @@ class ComposeController extends Controller
 
 		$photo = $request->file('file');
 
-		$mimes = explode(',', config('pixelfed.media_types'));
+		$mimes = explode(',', config_cache('pixelfed.media_types'));
 
 		abort_if(in_array($photo->getMimeType(), $mimes) == false, 400, 'Invalid media format');
 
@@ -131,10 +132,11 @@ class ComposeController extends Controller
 
 		$preview_url = $media->url() . '?v=' . time();
 		$url = $media->url() . '?v=' . time();
-		
+
 		switch ($media->mime) {
 			case 'image/jpeg':
 			case 'image/png':
+			case 'image/webp':
 			ImageOptimize::dispatch($media);
 			break;
 
@@ -163,8 +165,8 @@ class ComposeController extends Controller
 			'file' => function() {
 				return [
 					'required',
-					'mimes:' . config('pixelfed.media_types'),
-					'max:' . config('pixelfed.max_photo_size'),
+					'mimes:' . config_cache('pixelfed.media_types'),
+					'max:' . config_cache('pixelfed.max_photo_size'),
 				];
 			},
 		]);
@@ -407,6 +409,7 @@ class ComposeController extends Controller
 			'place' => 'nullable',
 			'comments_disabled' => 'nullable',
 			'tagged' => 'nullable',
+			'license' => 'nullable|integer|min:1|max:16'
 			// 'optimize_media' => 'nullable'
 		]);
 
@@ -439,6 +442,8 @@ class ComposeController extends Controller
 
 		abort_if($limitReached == true, 429);
 
+		$license = in_array($request->input('license'), License::keys()) ? $request->input('license') : null;
+
 		$visibility = $request->input('visibility');
 		$medias = $request->input('media');
 		$attachments = [];
@@ -450,7 +455,7 @@ class ComposeController extends Controller
 		$optimize_media = (bool) $request->input('optimize_media');
 
 		foreach($medias as $k => $media) {
-			if($k + 1 > config('pixelfed.max_album_length')) {
+			if($k + 1 > config_cache('pixelfed.max_album_length')) {
 				continue;
 			}
 			$m = Media::findOrFail($media['id']);
@@ -458,7 +463,7 @@ class ComposeController extends Controller
 				abort(403, 'Invalid media id');
 			}
 			$m->filter_class = in_array($media['filter_class'], Filter::classes()) ? $media['filter_class'] : null;
-			$m->license = $media['license'];
+			$m->license = $license;
 			$m->caption = isset($media['alt']) ? strip_tags($media['alt']) : null;
 			$m->order = isset($media['cursor']) && is_int($media['cursor']) ? (int) $media['cursor'] : $k;
 			// if($optimize_media == false) {
@@ -475,6 +480,8 @@ class ComposeController extends Controller
 			$attachments[] = $m;
 			array_push($mimes, $m->mime);
 		}
+
+		abort_if(empty($attachments), 422);
 
 		$mediaType = StatusController::mimeTypeCheck($mimes);
 
@@ -642,9 +649,9 @@ class ComposeController extends Controller
 			case 'image/jpeg':
 			case 'image/png':
 			case 'video/mp4':
-				$finished = config('pixelfed.cloud_storage') ? (bool) $media->cdn_url : (bool) $media->processed_at;
+				$finished = config_cache('pixelfed.cloud_storage') ? (bool) $media->cdn_url : (bool) $media->processed_at;
 				break;
-			
+
 			default:
 				# code...
 				break;

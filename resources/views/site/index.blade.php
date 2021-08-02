@@ -2,45 +2,45 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta name="mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+	<title>{{ config('app.name', 'Laravel') }}</title>
 
-    <meta property="og:site_name" content="{{ config('app.name', 'pixelfed') }}">
-    <meta property="og:title" content="{{ config('app.name', 'pixelfed') }}">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="{{request()->url()}}">
-    <meta property="og:description" content="Federated Image Sharing">
+	<meta property="og:site_name" content="{{ config('app.name', 'pixelfed') }}">
+	<meta property="og:title" content="{{ config('app.name', 'pixelfed') }}">
+	<meta property="og:type" content="article">
+	<meta property="og:url" content="{{request()->url()}}">
+	<meta property="og:description" content="Federated Image Sharing">
 
-    <meta name="medium" content="image">
-    <meta name="theme-color" content="#10c5f8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="shortcut icon" type="image/png" href="/img/favicon.png?v=2">
-    <link rel="apple-touch-icon" type="image/png" href="/img/favicon.png?v=2">
-    <link href="{{ mix('css/landing.css') }}" rel="stylesheet">
-    <style type="text/css">
-        .feature-circle {
-            display: flex !important;
-            -webkit-box-pack: center !important;
-            justify-content: center !important;
-            -webkit-box-align: center !important;
-            align-items: center !important;
-            margin-right: 1rem !important;
-            background-color: #08d !important;
-            color: #fff;
-            border-radius: 50% !important;
-            width: 60px;
-            height:60px;
-        }
-        .section-spacer {
-            height: 13vh;
-        }
-    </style>
+	<meta name="medium" content="image">
+	<meta name="theme-color" content="#10c5f8">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="shortcut icon" type="image/png" href="/img/favicon.png?v=2">
+	<link rel="apple-touch-icon" type="image/png" href="/img/favicon.png?v=2">
+	<link href="{{ mix('css/landing.css') }}" rel="stylesheet">
+	<style type="text/css">
+		.feature-circle {
+			display: flex !important;
+			-webkit-box-pack: center !important;
+			justify-content: center !important;
+			-webkit-box-align: center !important;
+			align-items: center !important;
+			margin-right: 1rem !important;
+			background-color: #08d !important;
+			color: #fff;
+			border-radius: 50% !important;
+			width: 60px;
+			height:60px;
+		}
+		.section-spacer {
+			height: 13vh;
+		}
+	</style>
 </head>
 <body class="">
     <main id="content">
@@ -72,29 +72,29 @@
                                         @csrf
                                         <div class="form-group row">
 
-                                            <div class="col-md-12">
-                                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="{{__('Email')}}" required autofocus>
+											<div class="col-md-12">
+												<input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="{{__('Email')}}" required autofocus>
 
-                                                @if ($errors->has('email'))
-                                                    <span class="invalid-feedback">
-                                                        <strong>{{ $errors->first('email') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
+												@if ($errors->has('email'))
+													<span class="invalid-feedback">
+														<strong>{{ $errors->first('email') }}</strong>
+													</span>
+												@endif
+											</div>
+										</div>
 
-                                        <div class="form-group row">
+										<div class="form-group row">
 
-                                            <div class="col-md-12">
-                                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{__('Password')}}" required>
+											<div class="col-md-12">
+												<input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{__('Password')}}" required>
 
-                                                @if ($errors->has('password'))
-                                                    <span class="invalid-feedback">
-                                                        <strong>{{ $errors->first('password') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
+												@if ($errors->has('password'))
+													<span class="invalid-feedback">
+														<strong>{{ $errors->first('password') }}</strong>
+													</span>
+												@endif
+											</div>
+										</div>
 
                                         <div class="form-group row">
                                             <div class="col-md-12">

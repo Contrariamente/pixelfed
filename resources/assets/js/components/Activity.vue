@@ -19,42 +19,42 @@
 						<div class="media-body font-weight-light">
 							<div v-if="n.type == 'favourite'">
 								<p class="my-0">
-									<a :href="n.account.url" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{truncate(n.account.username)}}</a> curtiu seu <a class="font-weight-bold" v-bind:href="n.status.url">post</a>.
+									<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> curtiu seu <a class="font-weight-bold" v-bind:href="getPostUrl(n.status)">post</a>.
 								</p>
 							</div>
 							<div v-else-if="n.type == 'comment'">
 								<p class="my-0">
-									<a :href="n.account.url" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{truncate(n.account.username)}}</a> comentou seu <a class="font-weight-bold" v-bind:href="n.status.url">post</a>.
+									<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> comentou no seu <a class="font-weight-bold" v-bind:href="getPostUrl(n.status)">post</a>.
 								</p>
 							</div>
 							<div v-else-if="n.type == 'mention'">
 								<p class="my-0">
-									<a :href="n.account.url" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{truncate(n.account.username)}}</a> <a class="font-weight-bold" v-bind:href="mentionUrl(n.status)">mencionou</a> você.
+									<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> <a class="font-weight-bold" v-bind:href="mentionUrl(n.status)">mencionou</a> você.
 								</p>
 							</div>
 							<div v-else-if="n.type == 'follow'">
 								<p class="my-0">
-									<a :href="n.account.url" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{truncate(n.account.username)}}</a> seguiu você.
+									<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> seguiu você.
 								</p>
 							</div>
 							<div v-else-if="n.type == 'share'">
 								<p class="my-0">
-									<a :href="n.account.url" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{truncate(n.account.username)}}</a> compartilhou seu <a class="font-weight-bold" v-bind:href="n.status.reblog.url">post</a>.
+									<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" data-placement="bottom" data-toggle="tooltip" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> compartilhou seu <a class="font-weight-bold" v-bind:href="getPostUrl(n.status)">post</a>.
 								</p>
 							</div>
 							<div v-else-if="n.type == 'modlog'">
 								<p class="my-0">
-									<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> atualizou o <a class="font-weight-bold" v-bind:href="n.modlog.url">modlog</a>.
+									<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> atualizou o <a class="font-weight-bold" v-bind:href="n.modlog.url">modlog</a>.
 								</p>
 							</div>
 							<div v-else-if="n.type == 'tagged'">
 								<p class="my-0">
-									<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> marcou você em um <a class="font-weight-bold" v-bind:href="n.tagged.post_url">post</a>.
+									<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> marcou você em um <a class="font-weight-bold" v-bind:href="n.tagged.post_url">post</a>.
 								</p>
 							</div>
 							<div v-else-if="n.type == 'direct'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> te mandou uma <a class="font-weight-bold" v-bind:href="'/account/direct/t/'+n.account.id">mensagem</a>.
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> te enviou uma <a class="font-weight-bold" v-bind:href="'/account/direct/t/'+n.account.id">mensagem</a>.
 							</p>
 						</div>
 							<div class="align-items-center">
@@ -63,7 +63,7 @@
 						</div>
 						<div>
 							<div v-if="n.status && n.status && n.status.media_attachments && n.status.media_attachments.length">
-								<a :href="n.status.url">
+								<a :href="getPostUrl(n.status)">
 									<img :src="n.status.media_attachments[0].preview_url" width="32px" height="32px">
 								</a>
 							</div>
@@ -144,6 +144,12 @@ export default {
 					if(n.type == 'share' && !status) {
 						return false;
 					}
+					if(n.type == 'comment' && !status) {
+						return false;
+					}
+					if(n.type == 'mention' && !status) {
+						return false;
+					}
 					return true;
 				});
 				let ids = res.data.map(n => n.id);
@@ -168,6 +174,12 @@ export default {
 				if(res.data.length) {
 					let data = res.data.filter(n => {
 						if(n.type == 'share' && !status) {
+							return false;
+						}
+						if(n.type == 'comment' && !status) {
+							return false;
+						}
+						if(n.type == 'mention' && !status) {
 							return false;
 						}
 						if(_.find(this.notifications, {id: n.id})) {
@@ -264,6 +276,22 @@ export default {
 			}
 			return '/';
 		},
+
+		getProfileUrl(account) {
+			if(account.local == true) {
+				return account.url;
+			}
+
+			return '/i/web/profile/_/' + account.id;
+		},
+
+		getPostUrl(status) {
+			if(status.local == true) {
+				return status.url;
+			}
+
+			return '/i/web/post/_/' + status.account.id + '/' + status.id;
+		}
 	}
 }
 </script>

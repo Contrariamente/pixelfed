@@ -12,6 +12,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div v-else-if="page == 'cameraRoll'">
 			<div class="card status-card card-md-rounded-0" style="display:flex;">
 				<div class="card-header d-inline-flex align-items-center justify-content-between bg-white">
@@ -42,6 +43,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div v-else>
 			<div class="card status-card card-md-rounded-0 w-100 h-100" style="display:flex;">
 				<div class="card-header d-inline-flex align-items-center justify-content-between bg-white">
@@ -87,13 +89,29 @@
 							<a v-if="!pageLoading && (page > 1 && page <= 2) || (page == 1 && ids.length != 0) || page == 'cropPhoto'" class="font-weight-bold text-decoration-none" href="#" @click.prevent="nextPage">Próximo</a>
 							<a v-if="!pageLoading && page == 3" class="font-weight-bold text-decoration-none" href="#" @click.prevent="compose()">Post</a>
 							<a v-if="!pageLoading && page == 'addText'" class="font-weight-bold text-decoration-none" href="#" @click.prevent="composeTextPost()">Post</a>
+							<a v-if="!pageLoading && page == 'video-2'" class="font-weight-bold text-decoration-none" href="#" @click.prevent="compose()">Post</a>
 						</span>
 					</div>
 				</div>
 				<div class="card-body p-0 border-top">
-					<div v-if="page == 'textOptions'" class="w-100 h-100" style="min-height: 280px;">
-						test
+					<div v-if="page == 'licensePicker'" class="w-100 h-100" style="min-height: 280px;">
+						<div class="list-group list-group-flush">
+							<div
+								v-for="(item, index) in availableLicenses"
+								class="list-group-item cursor-pointer"
+								:class="{
+									'text-primary': licenseIndex === index,
+									'font-weight-bold': licenseIndex === index
+								}"
+								@click="toggleLicense(index)">
+								{{item.name}}
+							</div>
+						</div>
 					</div>
+
+					<div v-if="page == 'textOptions'" class="w-100 h-100" style="min-height: 280px;">
+					</div>
+
 					<div v-if="page == 'addText'" class="w-100 h-100" style="min-height: 280px;">
 						<div class="mt-2">
 							<div class="media px-3">
@@ -136,7 +154,7 @@
 										</div>
 										<div class="media-body text-left">
 											<p class="mb-0">
-												<span class="h5 mt-0 font-weight-bold text-primary">Novo Post</span>
+												<span class="h5 mt-0 font-weight-bold text-primary">New Post</span>
 											</p>
 											<p class="mb-0 text-muted">Compartilhe até {{config.uploader.album_limit}} fotos ou vídeos</p>
 										</div>
@@ -317,6 +335,9 @@
 						<div class="border-bottom">
 							<p class="px-4 mb-0 py-2 cursor-pointer" @click="showTagCard()">Marcar alguém</p>
 						</div>
+						<!-- <div class="border-bottom">
+							<p class="px-4 mb-0 py-2 cursor-pointer" @click="showLicenseCard()">Add license <span class="ml-2 badge badge-primary">NEW</span></p>
+						</div> -->
 						<div class="border-bottom">
 							<p class="px-4 mb-0 py-2 cursor-pointer" @click="showLocationCard()" v-if="!place">Adicionar localização</p>
 							<p v-else class="px-4 mb-0 py-2">
@@ -394,7 +415,7 @@
 					</div>
 
 					<div v-if="page == 'addLocation'" class="w-100 h-100 p-3">
-						<p class="mb-0">Adicionar localização</p>
+						<p class="mb-0">Add Location</p>
 						<autocomplete
 							:search="locationSearch"
 							placeholder="Procurar locais ..."
@@ -565,11 +586,19 @@
 								</div>
 								<div class="form-group">
 									<label class="font-weight-bold text-muted small">License</label>
-									<input type="text" class="form-control" v-model="media[carouselCursor].license" placeholder="All Rights Reserved (Default license)">
-									<p class="help-text small text-muted mb-0 d-flex justify-content-between">
+									<!-- <input type="text" class="form-control" v-model="media[carouselCursor].license" placeholder="All Rights Reserved (Default license)"> -->
+									<!-- <p class="help-text small text-muted mb-0 d-flex justify-content-between">
 										<span></span>
 										<span>{{media[carouselCursor].license ? media[carouselCursor].license.length : 0}}/140</span>
-									</p>
+									</p> -->
+									<select class="form-control" v-model="licenseIndex">
+										<option
+											v-for="(item, index) in availableLicenses"
+											:value="index"
+											:selected="index === licenseIndex">
+											{{item.name}}
+										</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -578,6 +607,69 @@
 							<button type="button" @click="goBack()" class="btn btn-link text-muted font-weight-bold text-decoration-none">Cancelar</button>
 							<button type="button" @click="goBack()" class="btn btn-primary font-weight-bold">Salvar</button>
 						</p>
+					</div>
+
+					<div v-if="page == 'video-2'" class="w-100 h-100">
+						<div v-if="video.title.length" class="border-bottom">
+							<div class="media p-3">
+								<img :src="media[0].url" width="100px" height="70px" :class="[media[0].filter_class?'mr-2 ' + media[0].filter_class:'mr-2']">
+								<div class="media-body">
+									<p class="font-weight-bold mb-1">{{video.title ? video.title.slice(0,70) : 'Untitled'}}</p>
+									<p class="mb-0 text-muted small">{{video.description ? video.description.slice(0,90) : 'No description'}}</p>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="border-bottom d-flex justify-content-between px-4 mb-0 py-2 ">
+							<div>
+								<div class="text-dark ">Contains NSFW Media</div>
+							</div>
+							<div>
+								<div class="custom-control custom-switch" style="z-index: 9999;">
+									<input type="checkbox" class="custom-control-input" id="asnsfw" v-model="nsfw">
+									<label class="custom-control-label" for="asnsfw"></label>
+								</div>
+							</div>
+						</div>
+						<div class="border-bottom">
+							<p class="px-4 mb-0 py-2 cursor-pointer" @click="showLicenseCard()">Add license</p>
+						</div>
+						<div class="border-bottom">
+							<p class="px-4 mb-0 py-2">
+								<span>Audience</span>
+								<span class="float-right">
+									<a href="#" @click.prevent="showVisibilityCard()" class="btn btn-outline-secondary btn-sm small mr-3 mt-n1 disabled" style="font-size:10px;padding:3px;text-transform: uppercase" disabled>{{visibilityTag}}</a>
+									<a href="#" @click.prevent="showVisibilityCard()" class="text-decoration-none"><i class="fas fa-chevron-right fa-lg text-lighter"></i></a>
+								</span>
+							</p>
+						</div>
+
+						<div class="p-3">
+							<!-- <div class="card card-body shadow-none border d-flex justify-content-center align-items-center mb-3 p-5">
+								<div class="d-flex align-items-center">
+									<p class="mb-0 text-center">
+										<div class="spinner-border text-primary" role="status">
+											<span class="sr-only">Loading...</span>
+										</div>
+									</p>
+									<p class="ml-3 mb-0 text-center font-weight-bold">
+										Processing video
+									</p>
+								</div>
+							</div> -->
+							<div class="form-group">
+								<p class="small font-weight-bold text-muted mb-0">Title</p>
+								<input class="form-control" v-model="video.title" placeholder="Add a good title">
+								<p class="help-text mb-0 small text-muted">{{video.title.length}}/70</p>
+							</div>
+
+							<div class="form-group mb-0">
+								<p class="small font-weight-bold text-muted mb-0">Description</p>
+								<textarea class="form-control" v-model="video.description" placeholder="Add an optional description" maxlength="5000" rows="5"></textarea>
+								<p class="help-text mb-0 small text-muted">{{video.description.length}}/5000</p>
+							</div>
+						</div>
 					</div>
 
 				</div>
@@ -674,12 +766,16 @@ export default {
 			carouselCursor: 0,
 			uploading: false,
 			uploadProgress: 100,
-			composeType: false,
+			mode: 'photo',
+			modes: [
+				'photo',
+				'video',
+				'plain'
+			],
 			page: 1,
 			composeState: 'publish',
 			visibility: 'public',
 			visibilityTag: 'Public',
-			nsfw: false,
 			place: false,
 			commentsDisabled: false,
 			optimizeMedia: true,
@@ -707,7 +803,8 @@ export default {
 				'editMedia',
 				'cameraRoll',
 				'tagPeopleHelp',
-				'textOptions'
+				'textOptions',
+				'licensePicker'
 			],
 			cameraRollMedia: [],
 			taggedUsernames: [],
@@ -744,15 +841,55 @@ export default {
 						})
 					}
 				]
+			},
+			availableLicenses: [
+				{
+					id: 1,
+					name: "All Rights Reserved"
+				},
+				{
+					id: 5,
+					name: "Public Domain Work"
+				},
+				{
+					id: 6,
+					name: "Public Domain Dedication (CC0)"
+				},
+				{
+					id: 11,
+					name: "Attribution"
+				},
+				{
+					id: 12,
+					name: "Attribution-ShareAlike"
+				},
+				{
+					id: 13,
+					name: "Attribution-NonCommercial"
+				},
+				{
+					id: 14,
+					name: "Attribution-NonCommercial-ShareAlike"
+				},
+				{
+					id: 15,
+					name: "Attribution-NoDerivs"
+				},
+				{
+					id: 16,
+					name: "Attribution-NonCommercial-NoDerivs"
+				}
+			],
+			licenseIndex: 0,
+			video: {
+				title: '',
+				description: ''
 			}
 		}
 	},
 
 	beforeMount() {
 		this.fetchProfile();
-		if(this.config.uploader.media_types.includes('video/mp4') == false) {
-			this.composeType = 'post'
-		}
 		this.filters = window.App.util.filters;
 	},
 
@@ -794,6 +931,7 @@ export default {
 			this.pageTitle = 'New Text Post';
 			this.page = 'addText';
 			this.textMode = true;
+			this.mode = 'text';
 		},
 
 		mediaWatcher() {
@@ -844,7 +982,14 @@ export default {
 					self.media.push(e.data);
 					self.uploading = false;
 					setTimeout(function() {
-						self.page = 2;
+						// if(type === 'video/mp4') {
+						// 	self.pageTitle = 'Edit Video Details';
+						// 	self.mode = 'video';
+						// 	self.page = 'video-2';
+						// } else {
+						// 	self.page = 2;
+						// }
+						self.page = 3;
 					}, 300);
 				}).catch(function(e) {
 					switch(e.response.status) {
@@ -934,7 +1079,9 @@ export default {
 						comments_disabled: this.commentsDisabled,
 						place: this.place,
 						tagged: this.taggedUsernames,
-						optimize_media: this.optimizeMedia
+						optimize_media: this.optimizeMedia,
+						license: this.availableLicenses[this.licenseIndex].id,
+						video: this.video
 					};
 					axios.post('/api/compose/v0/publish', data)
 					.then(res => {
@@ -1001,37 +1148,99 @@ export default {
 		},
 
 		closeModal() {
-			this.composeType = '';
 			$('#composeModal').modal('hide');
 		},
 
 		goBack() {
 			this.pageTitle = '';
 
-			switch(this.page) {
-				case 'addText':
-					this.page = 1;
+			switch(this.mode) {
+				case 'photo':
+					switch(this.page) {
+						case 'addText':
+							this.page = 1;
+						break;
+
+						case 'textOptions':
+							this.page = 'addText';
+						break;
+
+						case 'cropPhoto':
+						case 'editMedia':
+							this.page = 2;
+						break;
+
+						case 'tagPeopleHelp':
+							this.showTagCard();
+						break;
+
+						case 'licensePicker':
+							this.page = 3;
+						break;
+
+						case 'video-2':
+							this.page = 1;
+						break;
+
+						default:
+							this.namedPages.indexOf(this.page) != -1 ?
+							this.page = 3 : this.page--;
+						break;
+					}
 				break;
 
-				case 'textOptions':
-					this.page = 'addText';
-				break;
+				case 'video':
+					switch(this.page) {
+						case 'licensePicker':
+							this.page = 'video-2';
+						break;
 
-				case 'cropPhoto':
-				case 'editMedia':
-					this.page = 2;
-				break;
+						case 'video-2':
+							this.page = 'video-2';
+						break;
 
-				case 'tagPeopleHelp':
-					this.showTagCard();
+						default:
+							this.page = 'video-2';
+						break;
+					}
 				break;
 
 				default:
-					this.namedPages.indexOf(this.page) != -1 ?
-					this.page = (this.textMode ? 'addText' : 3) :
-					(this.textMode ? 'addText' : this.page--);
+					switch(this.page) {
+						case 'addText':
+							this.page = 1;
+						break;
+
+						case 'textOptions':
+							this.page = 'addText';
+						break;
+
+						case 'cropPhoto':
+						case 'editMedia':
+							this.page = 2;
+						break;
+
+						case 'tagPeopleHelp':
+							this.showTagCard();
+						break;
+
+						case 'licensePicker':
+							this.page = 3;
+						break;
+
+						case 'video-2':
+							this.page = 1;
+						break;
+
+						default:
+							this.namedPages.indexOf(this.page) != -1 ?
+							this.page = (this.mode == 'text' ? 'addText' : 3) :
+							(this.mode == 'text' ? 'addText' : this.page--);
+						break;
+					}
 				break;
 			}
+
 		},
 
 		nextPage() {
@@ -1128,8 +1337,22 @@ export default {
 
 		onSubmitLocation(result) {
 			this.place = result;
-			this.pageTitle = this.textMode ? 'Novo post de texto' : '';
-			this.page = (this.textMode ? 'addText' : 3);
+			switch(this.mode) {
+				case 'photo':
+					this.pageTitle = '';
+					this.page = 3;
+				break;
+
+				case 'video':
+					this.pageTitle = 'Edit Video Details';
+					this.page = 'video-2';
+				break;
+
+				case 'text':
+					this.pageTitle = 'New Text Post';
+					this.page = 'addText';
+				break;
+			}
 			return;
 		},
 
@@ -1156,8 +1379,23 @@ export default {
 			}
 			this.visibility = state;
 			this.visibilityTag = tags[state];
-			this.pageTitle = '';
-			this.page = this.textMode ? 'addText' : 3;
+
+			switch(this.mode) {
+				case 'photo':
+					this.pageTitle = '';
+					this.page = 3;
+				break;
+
+				case 'video':
+					this.pageTitle = 'Edit Video Details';
+					this.page = 'video-2';
+				break;
+
+				case 'text':
+					this.pageTitle = 'New Text Post';
+					this.page = 'addText';
+				break;
+			}
 		},
 
 		showMediaDescriptionsCard() {
@@ -1269,8 +1507,34 @@ export default {
 
 		showTextOptions() {
 			this.page = 'textOptions';
-			this.pageTitle = 'Opções';
-		}
+			this.pageTitle = 'Text Post Options';
+		},
+
+		showLicenseCard() {
+			this.pageTitle = 'Select a License';
+			this.page = 'licensePicker';
+		},
+
+		toggleLicense(index) {
+			this.licenseIndex = index;
+
+			switch(this.mode) {
+				case 'photo':
+					this.pageTitle = '';
+					this.page = 3;
+				break;
+
+				case 'video':
+					this.pageTitle = 'Edit Video Details';
+					this.page = 'video-2';
+				break;
+
+				case 'text':
+					this.pageTitle = 'New Text Post';
+					this.page = 'addText';
+				break;
+			}
+		},
 	}
 }
 </script>

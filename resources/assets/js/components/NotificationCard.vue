@@ -2,12 +2,12 @@
 <div>
 	<transition name="fade">
 		<div class="card notification-card shadow-none border">
-			<div class="card-body loader text-center" style="height: 200px;">
+			<div v-if="loading" class="card-body loader text-center" style="height: 240px;">
 				<div class="spinner-border" role="status">
 					<span class="sr-only">Carregando...</span>
 				</div>
 			</div>
-			<div v-if="notifications.length > 0" class="card-body px-0 py-0 contents" style="max-height: 240px; overflow-y: scroll;">
+			<div v-if="!loading && notifications.length > 0" class="card-body px-0 py-0 contents" style="height: 240px; overflow-y: scroll;">
 				<div v-if="profile.locked" class="media align-items-center mt-n2 px-3 py-2 border-bottom border-lighter bg-light cursor-pointer" @click="redirect('/account/follow-requests')">
 					<div class="media-body font-weight-light pt-2 small d-flex align-items-center justify-content-between">
 						<p class="mb-0 text-lighter"><i class="fas fa-cog text-light"></i></p>
@@ -20,51 +20,51 @@
 					<div class="media-body font-weight-light small">
 						<div v-if="n.type == 'favourite'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> curtiu seu
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> curtiu seu
 								<span v-if="n.status.hasOwnProperty('media_attachments')">
-									<a class="font-weight-bold" v-bind:href="n.status.url" :id="'fvn-' + n.id">post</a>.
+									<a class="font-weight-bold" v-bind:href="getPostUrl(n.status)" :id="'fvn-' + n.id">post</a>.
 									<b-popover :target="'fvn-' + n.id" title="" triggers="hover" placement="top" boundary="window">
 										<img :src="notificationPreview(n)" width="100px" height="100px" style="object-fit: cover;">
 									</b-popover>
 								</span>
 								<span v-else>
-									<a class="font-weight-bold" v-bind:href="n.status.url">post</a>.
+									<a class="font-weight-bold" v-bind:href="getPostUrl(n.status)">post</a>.
 								</span>
 							</p>
 						</div>
 						<div v-else-if="n.type == 'comment'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> comentou no seu <a class="font-weight-bold" v-bind:href="n.status.url">post</a>.
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> comenteu no seu <a class="font-weight-bold" v-bind:href="getPostUrl(n.status)">post</a>.
 							</p>
 						</div>
 						<div v-else-if="n.type == 'mention'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> <a class="font-weight-bold" v-bind:href="mentionUrl(n.status)">mencionou</a> você.
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> <a class="font-weight-bold" v-bind:href="mentionUrl(n.status)">mencionou</a> você.
 							</p>
 						</div>
 						<div v-else-if="n.type == 'follow'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> seguiu você.
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> seguiu você.
 							</p>
 						</div>
 						<div v-else-if="n.type == 'share'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> compartilhou seu <a class="font-weight-bold" v-bind:href="n.status.url">post</a>.
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> compartilhou seu <a class="font-weight-bold" v-bind:href="getPostUrl(n.status)">post</a>.
 							</p>
 						</div>
 						<div v-else-if="n.type == 'modlog'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> atualizou um <a class="font-weight-bold" v-bind:href="n.modlog.url">modlog</a>.
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> updated a <a class="font-weight-bold" v-bind:href="n.modlog.url">modlog</a>.
 							</p>
 						</div>
 						<div v-else-if="n.type == 'tagged'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> marcou você em um <a class="font-weight-bold" v-bind:href="n.tagged.post_url">post</a>.
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> marcou você em um <a class="font-weight-bold" v-bind:href="n.tagged.post_url">post</a>.
 							</p>
 						</div>
 						<div v-else-if="n.type == 'direct'">
 							<p class="my-0">
-								<a :href="n.account.url" class="font-weight-bold text-dark word-break" :title="n.account.username">{{truncate(n.account.username)}}</a> enviou uma <a class="font-weight-bold" v-bind:href="'/account/direct/t/'+n.account.id">mensagem</a>.
+								<a :href="getProfileUrl(n.account)" class="font-weight-bold text-dark word-break" :title="n.account.username">{{n.account.local == false ? '@':''}}{{truncate(n.account.username)}}</a> te enviou uma <a class="font-weight-bold" v-bind:href="'/account/direct/t/'+n.account.id">mensagem</a>.
 							</p>
 						</div>
 						<div v-else>
@@ -86,6 +86,12 @@
 					<p class="mb-0 small font-weight-bold">Nenhuma notificação!</p>
 				</div>
 			</div>
+			<div v-if="!loading && !notifications.length" class="card-body px-0 py-0" style="height: 240px;">
+				<div class="text-lighter text-center py-3">
+					<p class="mb-0"><i class="fas fa-inbox fa-3x"></i></p>
+					<p class="mb-0 small font-weight-bold">Nenhuma notificação</p>
+				</div>
+			</div>
 		</div>
 	</transition>
 </div>
@@ -97,6 +103,7 @@
 	export default {
 		data() {
 			return {
+				loading: true,
 				notifications: {},
 				notificationCursor: 2,
 				notificationMaxId: 0,
@@ -123,12 +130,22 @@
 			fetchNotifications() {
 				axios.get('/api/pixelfed/v1/notifications?pg=true')
 				.then(res => {
-					let data = res.data;
-					let ids = res.data.map(n => n.id);
+					let data = res.data.filter(n => {
+						if(n.type == 'share' && !n.status) {
+							return false;
+						}
+						if(n.type == 'comment' && !n.status) {
+							return false;
+						}
+						if(n.type == 'mention' && !n.status) {
+							return false;
+						}
+						return true;
+					});
+					let ids = data.map(n => n.id);
 					this.notificationMaxId = Math.min(...ids);
 					this.notifications = data;
-					$('.notification-card .loader').addClass('d-none');
-					$('.notification-card .contents').removeClass('d-none');
+					this.loading = false;
 					//this.notificationPoll();
 				});
 			},
@@ -145,7 +162,13 @@
 				}).then(res => {
 					if(res.data.length) {
 						let data = res.data.filter(n => {
-							if(n.type == 'share' && !status) {
+							if(n.type == 'share' && !n.status) {
+								return false;
+							}
+							if(n.type == 'comment' && !n.status) {
+								return false;
+							}
+							if(n.type == 'mention' && !n.status) {
 								return false;
 							}
 							if(_.find(this.notifications, {id: n.id})) {
@@ -153,6 +176,8 @@
 							}
 							return true;
 						});
+						let ids = data.map(n => n.id);
+						this.notificationMaxId = Math.min(...ids);
 						this.notifications.push(...data);
 						this.notificationCursor++;
 						$state.loaded();
@@ -250,6 +275,22 @@
 					return '/storage/no-preview.png';
 				}
 				return n.status.media_attachments[0].preview_url;
+			},
+
+			getProfileUrl(account) {
+				if(account.local == true) {
+					return account.url;
+				}
+
+				return '/i/web/profile/_/' + account.id;
+			},
+
+			getPostUrl(status) {
+				if(status.local == true) {
+					return status.url;
+				}
+
+				return '/i/web/post/_/' + status.account.id + '/' + status.id;
 			}
 		}
 	}

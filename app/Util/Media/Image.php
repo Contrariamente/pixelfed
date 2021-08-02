@@ -15,7 +15,8 @@ class Image
 	public $orientation;
 	public $acceptedMimes = [
 		'image/png',
-		'image/jpeg'
+		'image/jpeg',
+		'image/webp'
 	];
 
 	public function __construct()
@@ -154,7 +155,7 @@ class Image
 						}
 					}
 					$media->metadata = json_encode($meta);
-				} 
+				}
 
 				$img->resize($aspect['width'], $aspect['height'], function ($constraint) {
 					$constraint->aspectRatio();
@@ -163,7 +164,7 @@ class Image
 			$converted = $this->setBaseName($path, $thumbnail, $img->extension);
 			$newPath = storage_path('app/'.$converted['path']);
 
-			$quality = config('pixelfed.image_quality');
+			$quality = config_cache('pixelfed.image_quality');
 			$img->save($newPath, $quality);
 
 			if ($thumbnail == true) {

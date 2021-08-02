@@ -1,12 +1,96 @@
 # Release Notes
 
-## [Unreleased](https://github.com/pixelfed/pixelfed/compare/v0.10.10...dev)
+## [Unreleased](https://github.com/pixelfed/pixelfed/compare/v0.11.0...dev)
+### Added
+- WebP Support ([069a0e4a](https://github.com/pixelfed/pixelfed/commit/069a0e4a))
+- Auto Following support for admins ([68aa2540](https://github.com/pixelfed/pixelfed/commit/68aa2540))
+- Mark as spammer mod tool, unlists and applies content warning to existing and future post ([6d956a86](https://github.com/pixelfed/pixelfed/commit/6d956a86))
+- Diagnostics for error page and admin dashboard ([64725ecc](https://github.com/pixelfed/pixelfed/commit/64725ecc))
+
+### Updated
+- Updated PrettyNumber, fix deprecated warning. ([20ec870b](https://github.com/pixelfed/pixelfed/commit/20ec870b))
+- Updated landing page, use config_cache. ([54920294](https://github.com/pixelfed/pixelfed/commit/54920294))
+- Updated Timeline, implement suggested post opt out. ([66750d34](https://github.com/pixelfed/pixelfed/commit/66750d34))
+- Updated Notification component, add at (@) symbol for remote profiles and local urls for remote posts and profile. ([aafd6a21](https://github.com/pixelfed/pixelfed/commit/aafd6a21))
+- Updated Activity component, add at (@) symbol for remote profiles and local urls for remote posts and profile. ([a2211815](https://github.com/pixelfed/pixelfed/commit/a2211815))
+- Updated Profile, add linkified bio, joined date, follows you label and improved website handling. ([8ee10436](https://github.com/pixelfed/pixelfed/commit/8ee10436))
+- Updated routes, add legacy webfinger profile redirect. ([93c7af74](https://github.com/pixelfed/pixelfed/commit/93c7af74))
+- Updated StoryController, fix expiration time bug. ([39e57f95](https://github.com/pixelfed/pixelfed/commit/39e57f95))
+- Updated Profile component, fix remote urls. ([6e56dbed](https://github.com/pixelfed/pixelfed/commit/6e56dbed))
+- Updated verify email screen, add contact admin link. ([f37952d6](https://github.com/pixelfed/pixelfed/commit/f37952d6))
+- Updated RemoteProfile component, implement pagination. ([02b04a4b](https://github.com/pixelfed/pixelfed/commit/02b04a4b))
+- Updated AP Helpers, generate notification for remote replies. ([8edd8294](https://github.com/pixelfed/pixelfed/commit/8edd8294))
+- Updated like api, store status_profile_id and is_comment. ([c8c6b983](https://github.com/pixelfed/pixelfed/commit/c8c6b983))
+- Updated Remote Post + Profile hashtag to redirect to local urls. ([1fa08644](https://github.com/pixelfed/pixelfed/commit/1fa08644))
+- Updated Inbox, delete notifications on tombstone. ([ef63124d](https://github.com/pixelfed/pixelfed/commit/ef63124d))
+- Updated NotificationCard, fix missing status bug. ([a3a86d46](https://github.com/pixelfed/pixelfed/commit/a3a86d46))
+- Updated Activity component, fix comment bug. ([9a2db8eb](https://github.com/pixelfed/pixelfed/commit/9a2db8eb))
+- Updated Inbox, fix tombstone bug. ([929ff5eb](https://github.com/pixelfed/pixelfed/commit/929ff5eb))
+- Updated LikeService, skip self likes. ([3741c76d](https://github.com/pixelfed/pixelfed/commit/3741c76d))
+- Updated StatusController, improve share api perf (11s to 72ms). ([d48ebb82](https://github.com/pixelfed/pixelfed/commit/d48ebb82))
+- Updated ApiController, fix nulls in  hashtag endpoint. ([f1208de0](https://github.com/pixelfed/pixelfed/commit/f1208de0))
+- Updated SharePipeline, add Undo->Announce support. ([c8e40e0f](https://github.com/pixelfed/pixelfed/commit/c8e40e0f))
+- Updated NetworkTimeline, fix remote comment urls. ([308acc91](https://github.com/pixelfed/pixelfed/commit/308acc91))
+- Updated Timeline component, abstracted reusable partials. ([858f3f9e](https://github.com/pixelfed/pixelfed/commit/858f3f9e))
+- Updated Timeline, fix suggested posts. ([3ba5c88c](https://github.com/pixelfed/pixelfed/commit/3ba5c88c))
+- Updated Timeline, disable new post update checker and hide reaction bar on network timeline. ([1e3d3a69](https://github.com/pixelfed/pixelfed/commit/1e3d3a69))
+- Updated PublicApiController, improve network timeline perf. ([e5f683fd](https://github.com/pixelfed/pixelfed/commit/e5f683fd))
+- Updated Network Timeline, use existing Timeline component. ([0deaafc0](https://github.com/pixelfed/pixelfed/commit/0deaafc0))
+- Updated PostComponent, show like count to owner using MomentUI. ([e9c46bab](https://github.com/pixelfed/pixelfed/commit/e9c46bab))
+- Updated ContextMenu, add missing statusUrl method. ([3cffdb11](https://github.com/pixelfed/pixelfed/commit/3cffdb11))
+- Updated PublicApiController, add LikeService to Network timeline. ([82895591](https://github.com/pixelfed/pixelfed/commit/82895591))
+- Updated moderator api, expire cached status in StatusService. ([f215ee26](https://github.com/pixelfed/pixelfed/commit/f215ee26))
+- Updated StatusHashtagService, fix null status bug. ([51a277e1](https://github.com/pixelfed/pixelfed/commit/51a277e1))
+- Updated NotificationService, use zrevrangebyscore for api. ([d43e6d8d](https://github.com/pixelfed/pixelfed/commit/d43e6d8d))
+- Updated ApiV1Controller, use PublicTimelineService. ([f67c67bc](https://github.com/pixelfed/pixelfed/commit/f67c67bc))
+- Updated ApiV1Controller, use ProfileService for verify_credentials. ([352aa573](https://github.com/pixelfed/pixelfed/commit/352aa573))
+- Updated RemotePost.vue, fix content warning button. ([7647e724](https://github.com/pixelfed/pixelfed/commit/7647e724))
+- Updated AdminMediaController, improve perf and use simple pagination. ([f2686cac](https://github.com/pixelfed/pixelfed/commit/f2686cac))
+- Updated PostComponent, fix MomentUI like counter. ([42c6121a](https://github.com/pixelfed/pixelfed/commit/42c6121a))
+- Updated status views, remove like counts from status embed. ([1a2e41b1](https://github.com/pixelfed/pixelfed/commit/1a2e41b1))
+- Updated Profile, fix unauthenticated private profiles. ([9017f7c4](https://github.com/pixelfed/pixelfed/commit/9017f7c4))
+- Updated PublicApiController, impr home timeline perf. ([4fe42e5b](https://github.com/pixelfed/pixelfed/commit/4fe42e5b))
+- Updated Timeline.vue, fix comment button. ([b6b5ce7c](https://github.com/pixelfed/pixelfed/commit/b6b5ce7c))
+- Updated StatusEntityLexer, only add specific status types to PublicTimelineService. ([1fdcbe5b](https://github.com/pixelfed/pixelfed/commit/1fdcbe5b))
+- Updated ActivityPub helpers, fix comment threading in statusFetch() method ([26b9c140](https://github.com/pixelfed/pixelfed/commit/26b9c140))
+- Updated NotificationCard, fix typo in mention, share and comments. Fixes #2848. ([b37bb426](https://github.com/pixelfed/pixelfed/commit/b37bb426))
+- Updated StatusCard.vue, add togglecw events to other presenters. ([9607243f](https://github.com/pixelfed/pixelfed/commit/9607243f))
+- Updated presenters, fix content warning layout. ([fc56acb8](https://github.com/pixelfed/pixelfed/commit/fc56acb8))
+- Updated reply blade view, fix missing avatar and media images. ([5fb33772](https://github.com/pixelfed/pixelfed/commit/5fb33772))
+- Updated components, add fallback default avatar. ([726553f5](https://github.com/pixelfed/pixelfed/commit/726553f5))
+- Updated job queue, separate deletes into their own queue. ([7f421392](https://github.com/pixelfed/pixelfed/commit/7f421392))
+- Updated DiscoverController, use UserFilterService on trendingApi. ([135474ae](https://github.com/pixelfed/pixelfed/commit/135474ae))
+- Updated PublicApiController, use UserFilterService in public timeline endpoint. ([ca6e491c](https://github.com/pixelfed/pixelfed/commit/ca6e491c))
+- Updated ContextMenu, add View Profile link. ([8544bcbd](https://github.com/pixelfed/pixelfed/commit/8544bcbd))
+- Updated presenters, improve content warnings. ([86422c81](https://github.com/pixelfed/pixelfed/commit/86422c81))
+- Updated Timeline.vue, increase pagination limit from 3 to 12 and add empty feed placeholder. ([916e8f71](https://github.com/pixelfed/pixelfed/commit/916e8f71))
+- Updated Timeline.vue, improve followed hashtags. ([728f10d7](https://github.com/pixelfed/pixelfed/commit/728f10d7))
+- Updated PostComponent, use profileUrl method for comments. ([7ed65fc9](https://github.com/pixelfed/pixelfed/commit/7ed65fc9))
+- Updated Timeline, fix empty timeline card. ([11eb6acd](https://github.com/pixelfed/pixelfed/commit/11eb6acd))
+- Updated ap helpers, set text type when appropriate. ([9f4f983f](https://github.com/pixelfed/pixelfed/commit/9f4f983f))
+- Updated StatusCard, add text support. ([ed14ee48](https://github.com/pixelfed/pixelfed/commit/ed14ee48))
+- Updated PublicApiController, filter out text replies on home timeline. ([86219b57](https://github.com/pixelfed/pixelfed/commit/86219b57))
+- Updated RemotePost.vue, improve text only post UI. ([b0257be2](https://github.com/pixelfed/pixelfed/commit/b0257be2))
+- Updated Timeline, make text-only posts opt-in by default. ([0153ed6d](https://github.com/pixelfed/pixelfed/commit/0153ed6d))
+- Updated LikeController, add UndoLikePipeline and federate Undo Like activities. ([8ac8fcad](https://github.com/pixelfed/pixelfed/commit/8ac8fcad))
+-  ([](https://github.com/pixelfed/pixelfed/commit/))
+
+## [v0.11.0 (2021-06-01)](https://github.com/pixelfed/pixelfed/compare/v0.10.10...v0.11.0)
 ### Added
 - Autocomplete Support (hashtags + mentions) ([de514f7d](https://github.com/pixelfed/pixelfed/commit/de514f7d))
+- Creative Commons Licenses ([552e950](https://github.com/pixelfed/pixelfed/commit/552e950))
+- Network Timeline ([af7face4](https://github.com/pixelfed/pixelfed/commit/af7face4))
+- Admin config settings ([f2066b74](https://github.com/pixelfed/pixelfed/commit/f2066b74))
+- Profile pronouns ([fabb57a9](https://github.com/pixelfed/pixelfed/commit/fabb57a9))
+- Hashtag timeline api support ([241ae036](https://github.com/pixelfed/pixelfed/commit/241ae036))
+- New admin dashboard layout ([eb7d5a4e](https://github.com/pixelfed/pixelfed/commit/eb7d5a4e))
+- Fresh about page layout ([92dc7af6](https://github.com/pixelfed/pixelfed/commit/92dc7af6))
+- Instance Rules ([a4efbb75](https://github.com/pixelfed/pixelfed/commit/a4efbb75))
+- New Home Timeline ([56215be7](https://github.com/pixelfed/pixelfed/commit/56215be7))
 
 ### Updated
 - Updated AdminController, fix variable name in updateSpam method. ([6edaf940](https://github.com/pixelfed/pixelfed/commit/6edaf940))
-- Updated RemotAvatarFetch, only dispatch jobs if cloud storage is enabled. ([4f40f6f5](https://github.com/pixelfed/pixelfed/commit/4f40f6f5))
+- Updated RemoteAvatarFetch, only dispatch jobs if cloud storage is enabled. ([4f40f6f5](https://github.com/pixelfed/pixelfed/commit/4f40f6f5))
 - Updated StatusService, add ttl of 7 days. ([6e44ae0b](https://github.com/pixelfed/pixelfed/commit/6e44ae0b))
 - Updated StatusHashtagService, use StatusService for statuses. ([0355b567](https://github.com/pixelfed/pixelfed/commit/0355b567))
 - Updated StatusHashtagService, remove deprecated methods. ([aa4c718d](https://github.com/pixelfed/pixelfed/commit/aa4c718d))
@@ -59,7 +143,48 @@
 - Updated PhotoPresenter, add width and height to images. ([3f8202e2](https://github.com/pixelfed/pixelfed/commit/3f8202e2))
 - Updated Compose Apis, refactor rate limits. ([42375b3d](https://github.com/pixelfed/pixelfed/commit/42375b3d))
 - Updated PublicApiController, show unlisted comments. ([e1c6297e](https://github.com/pixelfed/pixelfed/commit/e1c6297e))
--  ([](https://github.com/pixelfed/pixelfed/commit/))
+- Updated ApiV1Controller, add missing variable. ([886ea617](https://github.com/pixelfed/pixelfed/commit/886ea617))
+- Updated PublicApiController, limit network pagination to 3 months. ([10119bbb](https://github.com/pixelfed/pixelfed/commit/10119bbb))
+- Updated admin instance page, add search and improve performance. ([f5829373](https://github.com/pixelfed/pixelfed/commit/f5829373))
+- Updated AdminInstanceController, invalidate banned domain cache when updated. ([35393edf](https://github.com/pixelfed/pixelfed/commit/35393edf))
+- Updated AP Helpers, use instance filtering. ([66b4f8c7](https://github.com/pixelfed/pixelfed/commit/66b4f8c7))
+- Updated ApiV1Controller, add missing instance api attributes. ([64b86546](https://github.com/pixelfed/pixelfed/commit/64b86546))
+- Updated story garbage collection, handle non active stories and new ephemeral story media directory. ([c43f8bcc](https://github.com/pixelfed/pixelfed/commit/c43f8bcc))
+- Updated Stories, add crop and duration settings to composer. ([c8edca69](https://github.com/pixelfed/pixelfed/commit/c8edca69))
+- Updated instance endpoint, add custom description. ([668e936e](https://github.com/pixelfed/pixelfed/commit/668e936e))
+- Updated StoryCompose component, improve full screen preview. ([39a76103](https://github.com/pixelfed/pixelfed/commit/39a76103))
+- Updated Helpers, fix broken tests. ([22dddaa0](https://github.com/pixelfed/pixelfed/commit/22dddaa0))
+- Updated StoryController, fix cache crop bug. ([c2f8faae](https://github.com/pixelfed/pixelfed/commit/c2f8faae))
+- Updated StoryController, optimize photo size by resizing to 9:16 aspect. ([e66ed9a2](https://github.com/pixelfed/pixelfed/commit/e66ed9a2))
+- Updated StoryCompose crop logic. ([2ead622c](https://github.com/pixelfed/pixelfed/commit/2ead622c))
+- Updated StatusController, allow license edits without 24 hour limit. ([c799a01a](https://github.com/pixelfed/pixelfed/commit/c799a01a))
+- Updated Settings, remove reports page. ([9cf962ff](https://github.com/pixelfed/pixelfed/commit/9cf962ff))
+- Updated ProfileService, use account transformer. ([391b1287](https://github.com/pixelfed/pixelfed/commit/391b1287))
+- Updated LikeController, hide like counts. ([ea687240](https://github.com/pixelfed/pixelfed/commit/ea687240))
+- Updated StatusTransformers, add liked_by attribute. ([372bacb0](https://github.com/pixelfed/pixelfed/commit/372bacb0))
+- Updated PostComponent, change like logic. ([0a35f5d6](https://github.com/pixelfed/pixelfed/commit/0a35f5d6))
+- Updated Timeline component, change like logic. ([7bcbf96b](https://github.com/pixelfed/pixelfed/commit/7bcbf96b))
+- Updated LikeService, fix likedBy method. ([a5e64da6](https://github.com/pixelfed/pixelfed/commit/a5e64da6))
+- Updated PublicApiController, increase public timeline to 6 months from 3. ([8a736432](https://github.com/pixelfed/pixelfed/commit/8a736432))
+- Updated LikeService, show like count to status owner. ([4408e2ef](https://github.com/pixelfed/pixelfed/commit/4408e2ef))
+- Updated admin settings, add rules. ([a4efbb75](https://github.com/pixelfed/pixelfed/commit/a4efbb75))
+- Updated LikeService, fix authentication bug. ([c9abd70e](https://github.com/pixelfed/pixelfed/commit/c9abd70e))
+- Updated StatusTransformer, fix missing tags attribute. ([dac326e9](https://github.com/pixelfed/pixelfed/commit/dac326e9))
+- Updated ComposeController, bail on empty attachments. ([061b145b](https://github.com/pixelfed/pixelfed/commit/061b145b))
+- Updated landing and about page. ([92dc7af6](https://github.com/pixelfed/pixelfed/commit/92dc7af6))
+- Updated AdminStatsService, fix postgres bug. ([af719135](https://github.com/pixelfed/pixelfed/commit/af719135))
+- Updated api, remove auth requirement for hashtag timeline. ([c8e43c60](https://github.com/pixelfed/pixelfed/commit/c8e43c60))
+- Updated NotificationCard component, fix default value. ([78ad4e77](https://github.com/pixelfed/pixelfed/commit/78ad4e77))
+- Updated Timeline component, show counts and make sidebar footer lighter. ([0788bffa](https://github.com/pixelfed/pixelfed/commit/0788bffa))
+- Updated AuthServiceProvider, increase default token + refresh token lifetime. ([178ed63d](https://github.com/pixelfed/pixelfed/commit/178ed63d))
+- Updated liked by, fix remote username urls. ([f767d99a](https://github.com/pixelfed/pixelfed/commit/f767d99a))
+- Updated StatusController, add cache invalidation for timeline cursor. ([f3bf2fd4](https://github.com/pixelfed/pixelfed/commit/f3bf2fd4))
+- Updated PublicApiController, add recent feed support to home timeline. ([1e230e80](https://github.com/pixelfed/pixelfed/commit/1e230e80))
+- Updated Inbox, fix reply/comment bug by moving attachment validation to Note with attachments. ([28df9f7e](https://github.com/pixelfed/pixelfed/commit/28df9f7e))
+- Updated PrettyNumber, add decimal option. ([84520fe1](https://github.com/pixelfed/pixelfed/commit/84520fe1))
+- Updated app config, change default descriptions. ([7d24560d](https://github.com/pixelfed/pixelfed/commit/7d24560d))
+- Updated NotificationCard, fix loading bug. ([69567e19](https://github.com/pixelfed/pixelfed/commit/69567e19))
+- Updated DirectMessageController, disable exception logging for invalid urls. Fixes ([#2752](https://github.com/pixelfed/pixelfed/issues/2752)). ([2d0a253e](https://github.com/pixelfed/pixelfed/commit/2d0a253e))
 
 ## [v0.10.10 (2021-01-28)](https://github.com/pixelfed/pixelfed/compare/v0.10.9...v0.10.10)
 ### Added
@@ -402,7 +527,7 @@
 - Updated CollectionController, increase limit from 18 to 50. ([c2826fd3](https://github.com/pixelfed/pixelfed/c2826fd3))
 
 ## Deprecated
-    
+
 
 ## [v0.10.6 (2019-09-30)](https://github.com/pixelfed/pixelfed/compare/v0.10.5...v0.10.6)
 
@@ -467,7 +592,7 @@
 - Run ```php artisan passport:keys```
 - Add ```OAUTH_ENABLED=true``` to .env
 - Run ```php artisan config:cache```
-    
+
 
 ## [v0.10.5 (2019-09-24)](https://github.com/pixelfed/pixelfed/compare/v0.10.4...v0.10.5)
 
@@ -478,8 +603,8 @@
 - Fixed cache bug in privacy and terms pages [#1712](https://github.com/pixelfed/pixelfed/commit/fe522da8db7a8b0d7c18d405abcb885f8678f35c)
 
 ### Changed
-    
-    
+
+
 ## [v0.10.4 (2019-09-24)](https://github.com/pixelfed/pixelfed/compare/v0.10.3...v0.10.4)
 
 ### Added
@@ -510,17 +635,17 @@
 ## Deprecated
 - Remove deprecated profile following/followers [#1697](https://github.com/pixelfed/pixelfed/pull/1697)
 - Remove old comment permalink [05f6598](https://github.com/pixelfed/pixelfed/pull/1708/commits/05f659896d903e1ff41dba810f125d721fa057e7)
-    
-    
+
+
 ## [v0.10.3 (2019-09-08)](https://github.com/pixelfed/pixelfed/compare/v0.10.2...v0.10.3)
 
 ### Added
 - Append ```.json``` to local status urls to view ActivityPub object [#1666](https://github.com/pixelfed/pixelfed/pull/1666)
 
 ### Fixed
-- Reverted ```strict``` Same-Site Cookies to ```null``` to fix 2FA/session expiry [#1667](https://github.com/pixelfed/pixelfed/pull/1667) 
-- Fixed AP errors by storing ActivityPub object id and url [#1668](https://github.com/pixelfed/pixelfed/pull/1668) [#1683](https://github.com/pixelfed/pixelfed/pull/1683) 
-- Fixed content warnings that had filter applied [#1669](https://github.com/pixelfed/pixelfed/pull/1669) 
+- Reverted ```strict``` Same-Site Cookies to ```null``` to fix 2FA/session expiry [#1667](https://github.com/pixelfed/pixelfed/pull/1667)
+- Fixed AP errors by storing ActivityPub object id and url [#1668](https://github.com/pixelfed/pixelfed/pull/1668) [#1683](https://github.com/pixelfed/pixelfed/pull/1683)
+- Fixed content warnings that had filter applied [#1669](https://github.com/pixelfed/pixelfed/pull/1669)
 
 ### Changed
 - Japanese Translations [#1673](https://github.com/pixelfed/pixelfed/pull/1673)
@@ -530,7 +655,7 @@
 
 ### Deprecated
 - Personalized Discover has been deprecated due to low use [#1670](https://github.com/pixelfed/pixelfed/pull/1670)
-    
+
 
 ## [v0.10.2 (2019-09-06)](https://github.com/pixelfed/pixelfed/compare/v0.10.1...v0.10.2)
 
@@ -550,7 +675,7 @@
 - Loops! Discover short videos
 - Preliminary support for profile PropertyValue metadata
 - Preliminary support for Direct Messages
-- Places! Run the artisan task `import:cities` 
+- Places! Run the artisan task `import:cities`
 - Emails are now validated and banned email domains are disallowed at signup. Artisan task `email:bancheck` will validate existing users.
 - .env vars `REDIS_SCHEME` and `REDIS_PATH` allow for using Redis over a Unix socket instead of TCP [#1602](https://github.com/pixelfed/pixelfed/pull/1602)
 - .env var `IMAGE_DRIVER` allows using imagick instead of gd
@@ -573,7 +698,7 @@
 - Sample nginx.conf in contrib/ now uses HTTPS instead of HTTP. Docs updated to reference this file
 - Updated register form
 - Allow users to edit email after registrations
-    
+
 
 ## [v0.10.0 (2019-07-17)](https://github.com/pixelfed/pixelfed/compare/v0.9.6...v0.10.0)
 
@@ -594,7 +719,7 @@
 
 ### Fixed
 - Hashtag post count off-by-one [#1485](https://github.com/pixelfed/pixelfed/pull/1485)
-    
+
 
 ## [v0.9.5 (2019-07-10)](https://github.com/pixelfed/pixelfed/compare/v0.9.4...v0.9.5)
 
@@ -630,8 +755,8 @@
 
 ### Removed
 - Remove Classic Compose UI [#1434](https://github.com/pixelfed/pixelfed/pull/1434), [72bffd1](https://github.com/pixelfed/pixelfed/commit/72bffd1) [a2640af](https://github.com/pixelfed/pixelfed/commit/a2640af)
-- 
-    
+-
+
 
 ## [v0.9.4 (2019-06-03)](https://github.com/pixelfed/pixelfed/compare/v0.9.0...v0.9.4)
 
@@ -671,7 +796,7 @@ php artisan config:cache
 ### Removed
 - Google Recaptcha is no longer supported (#1231)
 - Lightbox has been deprecated in favor of double-tap-to-like; it will return as a dedicated button in the future (#1277)
-    
+
 
 ## [v0.9.0 (2019-04-17)](https://github.com/pixelfed/pixelfed/compare/v0.8.6...v0.9.0)
 
@@ -697,7 +822,7 @@ php artisan config:cache
 
 ### Removed
 - Removed identicons due to SVG compatibility issues with federation. New users will instead be assigned a default avatar.
-    
+
 
 ## [v0.8.6 (2019-04-06)](https://github.com/pixelfed/pixelfed/compare/v0.8.5...v0.8.6)
 

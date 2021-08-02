@@ -55,10 +55,6 @@
 									<div class="info-overlay-text">
 										<h5 class="text-white m-auto font-weight-bold">
 											<span>
-												<span class="far fa-heart fa-lg p-2 d-flex-inline"></span>
-												<span class="d-flex-inline">{{formatCount(s.favourites_count)}}</span>
-											</span>
-											<span>
 												<span class="far fa-comment fa-lg p-2 d-flex-inline"></span>
 												<span class="d-flex-inline">{{formatCount(s.reply_count)}}</span>
 											</span>
@@ -119,10 +115,6 @@
 									<span v-if="s.pf_type == 'video:album'" class="float-right mr-3 post-icon"><i class="fas fa-film fa-2x"></i></span>
 									<div class="info-overlay-text">
 										<h5 class="text-white m-auto font-weight-bold">
-											<span>
-												<span class="far fa-heart fa-lg p-2 d-flex-inline"></span>
-												<span class="d-flex-inline">{{formatCount(s.favourites_count)}}</span>
-											</span>
 											<span>
 												<span class="far fa-comment fa-lg p-2 d-flex-inline"></span>
 												<span class="d-flex-inline">{{formatCount(s.reply_count)}}</span>
