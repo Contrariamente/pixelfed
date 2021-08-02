@@ -22,6 +22,7 @@ use App\Jobs\AvatarPipeline\CreateAvatar;
 use App\Jobs\RemoteFollowPipeline\RemoteFollowImportRecent;
 use App\Jobs\ImageOptimizePipeline\{ImageOptimize,ImageThumbnail};
 use App\Jobs\StatusPipeline\NewStatusPipeline;
+use App\Jobs\StatusPipeline\StatusReplyPipeline;
 use App\Util\ActivityPub\HttpSignature;
 use Illuminate\Support\Str;
 use App\Services\ActivityPubFetchService;
@@ -350,7 +351,7 @@ class Helpers {
 		}
 
 		$profile = self::profileFirstOrNew($activity['object']['attributedTo']);
-		if(isset($activity['object']['inReplyTo']) && !empty($activity['object']['inReplyTo']) && $replyTo == true) {
+		if(isset($activity['object']['inReplyTo']) && !empty($activity['object']['inReplyTo']) || $replyTo == true) {
 			$reply_to = self::statusFirstOrFetch($activity['object']['inReplyTo'], false);
 			$reply_to = optional($reply_to)->id;
 		} else {
@@ -397,6 +398,8 @@ class Helpers {
 				$status->save();
 				if($reply_to == null) {
 					self::importNoteAttachment($res, $status);
+				} else {
+					StatusReplyPipeline::dispatch($status);
 				}
 				return $status;
 			});
@@ -413,6 +416,7 @@ class Helpers {
 	public static function importNoteAttachment($data, Status $status)
 	{
 		if(self::verifyAttachments($data) == false) {
+			$status->viewType();
 			return;
 		}
 		$attachments = isset($data['object']) ? $data['object']['attachment'] : $data['attachment'];

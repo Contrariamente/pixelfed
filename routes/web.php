@@ -77,6 +77,9 @@ Route::domain(config('pixelfed.domain.admin'))->prefix('i/admin')->group(functio
 	Route::post('newsroom/edit/{id}', 'AdminController@newsroomUpdate');
 	Route::delete('newsroom/edit/{id}', 'AdminController@newsroomDelete');
 	Route::post('newsroom/create', 'AdminController@newsroomStore');
+
+	Route::get('diagnostics/home', 'AdminController@diagnosticsHome')->name('admin.diagnostics');
+	Route::post('diagnostics/decrypt', 'AdminController@diagnosticsDecrypt')->name('admin.diagnostics.decrypt');
 });
 
 Route::domain(config('pixelfed.domain.app'))->middleware(['validemail', 'twofactor', 'localization','interstitial'])->group(function () {
@@ -423,6 +426,9 @@ Route::domain(config('pixelfed.domain.app'))->middleware(['validemail', 'twofact
 			Route::get('/', 'ImportController@mastodon')->name('settings.import.mastodon');
 		  });
 		});
+
+		Route::get('timeline', 'SettingsController@timelineSettings')->name('settings.timeline');
+		Route::post('timeline', 'SettingsController@updateTimelineSettings');
 	});
 
 	Route::group(['prefix' => 'site'], function () {

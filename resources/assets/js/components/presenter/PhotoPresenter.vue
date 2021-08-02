@@ -31,6 +31,24 @@
 				:height="height()"
 				onerror="this.onerror=null;this.src='/storage/no-preview.png'">
 
+				<p v-if="!status.sensitive && sensitive"
+					@click="status.sensitive = true"
+					style="
+					margin-top: 0;
+					padding: 10px;
+					color: #fff;
+					font-size: 10px;
+					text-align: right;
+					position: absolute;
+					top: 0;
+					right: 0;
+					border-top-left-radius: 5px;
+					cursor: pointer;
+					background: linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5));
+				">
+					<i class="fas fa-eye-slash fa-lg"></i>
+				</p>
+
 				<p
 					v-if="status.media_attachments[0].license"
 					style="
@@ -54,12 +72,14 @@
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
   }
+  .content-label-wrapper {
+  	position: relative;
+  }
   .content-label {
   	margin: 0;
   	position: absolute;
   	top:50%;
   	left:50%;
-  	z-index: 2;
   	transform: translate(-50%, -50%);
   	display: flex;
   	flex-direction: column;
@@ -75,6 +95,12 @@
 <script type="text/javascript">
 	export default {
 		props: ['status'],
+
+		data() {
+			return {
+				sensitive: this.status.sensitive
+			}
+		},
 
 		methods: {
 			altText(status) {

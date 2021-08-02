@@ -47,8 +47,9 @@ class SharePipeline implements ShouldQueue
 	public function handle()
 	{
 		$status = $this->status;
+		$parent = $this->status->parent();
 		$actor = $status->profile;
-		$target = $status->parent()->profile;
+		$target = $parent->profile;
 
 		if ($status->uri !== null) {
 			// Ignore notifications to remote statuses
@@ -60,18 +61,21 @@ class SharePipeline implements ShouldQueue
 				  ->whereAction('share')
 				  ->whereItemId($status->reblog_of_id)
 				  ->whereItemType('App\Status')
-				  ->count();
+				  ->exists();
 
-		if ($target->id === $status->profile_id) {
+		if($target->id === $status->profile_id) {
 			$this->remoteAnnounceDeliver();
 			return true;
 		}
 
-		if( $exists !== 0) {
+		if($exists === true) {
 			return true;
 		}
 
 		$this->remoteAnnounceDeliver();
+
+		$parent->reblogs_count = $parent->shares()->count();
+		$parent->save();
 
 		try {
 			$notification = new Notification;

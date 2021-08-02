@@ -130,8 +130,19 @@
 			fetchNotifications() {
 				axios.get('/api/pixelfed/v1/notifications?pg=true')
 				.then(res => {
-					let data = res.data;
-					let ids = res.data.map(n => n.id);
+					let data = res.data.filter(n => {
+						if(n.type == 'share' && !n.status) {
+							return false;
+						}
+						if(n.type == 'comment' && !n.status) {
+							return false;
+						}
+						if(n.type == 'mention' && !n.status) {
+							return false;
+						}
+						return true;
+					});
+					let ids = data.map(n => n.id);
 					this.notificationMaxId = Math.min(...ids);
 					this.notifications = data;
 					this.loading = false;
@@ -151,7 +162,13 @@
 				}).then(res => {
 					if(res.data.length) {
 						let data = res.data.filter(n => {
-							if(n.type == 'share' && !status) {
+							if(n.type == 'share' && !n.status) {
+								return false;
+							}
+							if(n.type == 'comment' && !n.status) {
+								return false;
+							}
+							if(n.type == 'mention' && !n.status) {
 								return false;
 							}
 							if(_.find(this.notifications, {id: n.id})) {
@@ -159,6 +176,8 @@
 							}
 							return true;
 						});
+						let ids = data.map(n => n.id);
+						this.notificationMaxId = Math.min(...ids);
 						this.notifications.push(...data);
 						this.notificationCursor++;
 						$state.loaded();
