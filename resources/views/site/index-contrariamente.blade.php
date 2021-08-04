@@ -197,14 +197,14 @@
                 <div class="text-depoimento-bottom">
                 <p>O contrariamente me ajudou demais a encontrar novos trabalhos através das conexãoes,
                 acho que nos dias de hoje com tudo muito virtual essa rede apostou muito e ganhou!
-                Melhor opção e desing bem atual. Recomendo a todos.</p>
+                </p>
                  <div class="titulo-name-02">
                   <p>Alexadre Merello</p>
                   <span>Business Intelligence Analyst</span>
                   </div>
                 </div>
                </div>
-               <div class="col-12 col-md-6 offset-md-1" id="section-depoimentos">
+               <div class="col-12 col-md-6 offset-md-1" id="section-proposito">
                   <div class="nova-forma-div">
                   <img src="/img/forma-a.png" loading="lazy"  id="forma-a">
                   <p class="a-suarede">

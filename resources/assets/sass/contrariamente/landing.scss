@@ -67,8 +67,26 @@
         margin-left: 64% !important;
         margin-top: -8% !important;
     }
+ 
+}
+@media (max-width: 480px){
+    #section-proposito{
+        display:inherit;
+        margin-left: 7% !important;
+        margin-top: 46%;
+    }
+}
+
+
+@media (min-width: 768px) {
+    #section-proposito{
+        display:flex;
+        margin-left: 19% !important;
+        margin-top: 20%;
+    }
     
 }
+
 @media (max-width: 600px){
     .offset-md-1 {
         margin-left: unset !important;
@@ -159,7 +177,7 @@
     font-size: 26px;
     max-width: 338px;
     margin-left: -7px;
-    margin-top: 1em;
+    margin-top: 11%;
 }
 .titulo-name-02 span{
     color: #6b1ce9;
@@ -188,7 +206,7 @@
     margin-left: 0.5em;
 }
 .nova-forma-div{
-    margin-left: 6em;
+    margin-left: 2em;
     margin-top: -13em;
 }
 #forma-a{
@@ -226,6 +244,13 @@
     max-width: 40em;
 }
 @media (max-width: 768px){
+    .nova-oportunidade{
+        margin-left: 2em;
+        margin-top: 3em;
+    }
+    .section-03-l02{
+        margin-left: 28em;
+    }
     #section-depoimentos{
         margin-top: 12em;
     }
@@ -264,7 +289,7 @@
         float: none;
         width: 13em;
         height: 13em;
-        margin-left: 5em;
+        margin-left: -10em;
     }
     .text-depoimento{
         max-width: 367px;
@@ -275,16 +300,17 @@
         padding: 9px;
     }
     .nova-forma-div{
-        margin-top: 1em;
+        margin-top: -9em;
     }
     .text-depoimento-bottom{
         max-width: 367px;
         height: 11em;
         font-size: 13px;
-        margin-left: unset;
+        margin-left: -16em;
     }
     .text-depoimento-bottom p {
         padding: 9px;
+        max-width: 287px;
     }
     .titulo-name-02{
         max-width: 317px;
@@ -301,10 +327,10 @@
     }
     .nova-oportunidade {
         margin-left: -1em;
-        margin-top: 6em;
+        margin-top: 3em;
     }
     .nova-oportunidade h1{
-        font-size: 31px;
+        font-size: 25px;
     }
     .section-03-l01{
         margin-top: -5em;
@@ -322,12 +348,22 @@
         margin-top: -1em;
     }
     .nova-oportunidade {
-        margin-left: -15em;
+        margin-left: 2em;
     }
     .img-logo-photo{
-        max-width: 530px;
+        display: none;
+        max-width: unset;
+        width: 115%;
+        height: 25em;
     }
     #btn-cadastro{
-        width: 25%;
+        width: 70%;
     }
 }
+@media (min-width: 999px){
+    #section-proposito{
+        display:block;
+        margin-left: 64% !important;
+        margin-top: unset;
+    }
+    }
