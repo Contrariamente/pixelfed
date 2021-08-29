@@ -24,7 +24,7 @@ class SiteController extends Controller
 
 	public function homeGuest()
 	{
-		return view('site.index');
+		return view('site.index-contrariamente');
 	}
 
 	public function homeTimeline(Request $request)

@@ -365,7 +365,7 @@
 							</span>
 						</div>
 						<div class="d-flex align-items-center">
-							<!-- <div class="custom-control custom-switch mr-3">
+							<div class="custom-control custom-switch mr-3">
 								<input type="checkbox" class="custom-control-input" id="replyModalCWSwitch" v-model="replyNsfw">
 								<label :class="[replyNsfw ? 'custom-control-label font-weight-bold text-dark':'custom-control-label text-lighter']" for="replyModalCWSwitch">Mark as NSFW</label>
 							</div>
@@ -385,7 +385,7 @@
 				rounded
 				size="xl"
 				body-class="list-group-flush p-0 m-0 rounded">
-				<!-- <post-component
+				<post-component
 					v-if="ctxMenuStatus"
 					:status-template="ctxMenuStatus.pf_type"
 					:status-id="ctxMenuStatus.id"
@@ -395,8 +395,8 @@
 					:status-avatar="ctxMenuStatus.account.avatar"
 					:status-profile-id="ctxMenuStatus.account.id"
 					profile-layout="metro">
-				</post-component> -->
-			</b-modal>
+				</post-component> 
+			</b-modal>-->
 		</div>
 	</div>
 </template>

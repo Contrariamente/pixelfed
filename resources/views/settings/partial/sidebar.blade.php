@@ -26,9 +26,7 @@
       <li class="nav-item pl-3 {{request()->is('settings/relationships*')?'active':''}}">
         <a class="nav-link font-weight-light text-muted" href="{{route('settings.relationships')}}">{{__('Relationships')}}</a>
       </li>
-      <!-- <li class="nav-item pl-3 {{request()->is('settings/reports*')?'active':''}}">
-        <a class="nav-link font-weight-light text-muted" href="{{route('settings.reports')}}">{{__('Reports')}}</a>
-      </li> -->
+
 
       <li class="nav-item pl-3 {{request()->is('settings/security*')?'active':''}}">
         <a class="nav-link font-weight-light text-muted" href="{{route('settings.security')}}">{{__('Security')}}</a>
