@@ -501,4 +501,9 @@ Route::domain(config('pixelfed.domain.app'))->middleware(['validemail', 'twofact
 	Route::get('@{username}@{domain}', 'SiteController@legacyWebfingerRedirect');
 	Route::get('@{username}', 'SiteController@legacyProfileRedirect');
 	Route::get('{username}', 'ProfileController@show');
+
+    //laravel socialite facebook
+	Route::get('login/{provider}','Auth\LoginController@redirectToLoginProvider')->name('social.login');
+	Route::get('login/{provider}/callback','Auth\LoginController@handleCallbackProvider')->name('social.callback');
+
 });

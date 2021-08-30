@@ -124,6 +124,11 @@
                                                     {{ __('Login') }}
                                                 </button>
                                             </div>
+                                            <div class="col-md-12">
+                                                <a href="{{route('social.login', ['provider'=>'facebook'])}}" class="btn btn-block py-0 font-weight-bold text-uppercase">
+                                                    <i class="fab fa-facebook-f fa-fw"></i> Entre com o Facebook
+                                                </a>
+                                            </div>                                            
                                             <div class="card shadow-none border card-body" id="card-form-login">
                                                 <p class="text-center mb-0 font-weight-bold small">
                                                     @if(config('pixelfed.open_registration'))
