@@ -39,7 +39,7 @@ services:
       depends_on:
           - db
           - redis
-      command: bash -c "sleep 20 && php artisan migrate --force && composer install --prefer-dist --no-interaction --no-ansi && ln -s public html"
+      command: bash -c "composer install --prefer-dist --no-interaction --no-ansi && sleep 10 && php artisan migrate --force && ln -s public html"
 
   ## DB and Cache
   db:
