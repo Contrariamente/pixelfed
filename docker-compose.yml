@@ -1,87 +1,82 @@
 ---
 version: '3'
 
-# In order to set configuration, please use a .env file in
-# your compose project directory (the same directory as your
-# docker-compose.yml), and set database options, application
-# name, key, and other settings there.
-# A list of available settings is available in .env.example
-#
-# The services should scale properly across a swarm cluster
-# if the volumes are properly shared between cluster members.
-
 services:
-## App and Worker
   app:
     # Comment to use dockerhub image
     build:
       context: .
-      dockerfile: contrib/docker/Dockerfile.apache
-    image: pixelfed
+      dockerfile: contrib/docker/Dockerfile
+    image: ismaelmds/pixelfed
     restart: unless-stopped
     env_file:
       - .env.docker
     volumes:
-      - app-storage:/var/www/storage
-      - app-bootstrap:/var/www/bootstrap
+      - .:/var/www
     networks:
       - external
-      - internal
     ports:
       - "8080:80"
     depends_on:
       - db
       - redis
+      - migration
+    labels:
+      - "traefik.http.routers.app.rule=Host(`contrariamente.local`)"
+      - "traefik.http.routers.app.tls=true"
 
-  worker:
-    build:
-      context: .
-      dockerfile: contrib/docker/Dockerfile.apache
-    image: pixelfed
-    restart: unless-stopped
-    env_file:
-      - .env.docker
-    volumes:
-      - app-storage:/var/www/storage
-      - app-bootstrap:/var/www/bootstrap
-    networks:
-      - external
-      - internal
-    command: gosu www-data php artisan horizon
-    depends_on:
-      - db
-      - redis
+  migration:
+      build:
+        context: .
+        dockerfile: contrib/docker/Dockerfile
+      image: ismaelmds/pixelfed
+      env_file:
+          - .env.docker
+      volumes:
+        - .:/var/www
+      networks:
+          - external
+      depends_on:
+          - db
+          - redis
+      command: bash -c "composer install --prefer-dist --no-interaction --no-ansi && sleep 10 && php artisan migrate --force && ln -s public html"
 
-## DB and Cache
+  ## DB and Cache
   db:
     image: mysql:8.0
     restart: unless-stopped
     networks:
-      - internal
+      - external
     command: --default-authentication-plugin=mysql_native_password
     env_file:
       - .env.docker
-    volumes:
-      - "db-data:/var/lib/mysql"
+    ports:
+        - 3306:3306
 
   redis:
     image: redis:5-alpine
     restart: unless-stopped
     env_file:
       - .env.docker
-    volumes:
-      - "redis-data:/data"
     networks:
-      - internal
+      - external
 
-volumes:
-  db-data:
-  redis-data:
-  app-storage:
-  app-bootstrap:
+  traefik:
+    image: "traefik:v2.0"
+    command:
+      - --entrypoints.web.address=:80
+      - --entrypoints.web-secure.address=:443
+      - --providers.docker=true
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - external
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    depends_on:
+      - app
 
 networks:
-  internal:
-    internal: true
   external:
     driver: bridge
