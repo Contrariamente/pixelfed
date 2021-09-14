@@ -1,0 +1,125 @@
+.nova-oportunidade{
+    margin-left: -35em;
+    margin-top: 7em;
+}
+.nova-oportunidade h1{
+    font-size: 2.7em;
+    font-weight: bold;
+    
+}
+#btn-cadastro{
+    border-radius: 25px;
+    width: 23%;
+    height: 41px;
+}
+.img-logo-photo{
+    background-size: cover;
+    background-repeat: no-repeat;
+      background-image: url("/img/logo-padrao.png");
+      margin-top: -12em;
+      height: 43em;
+      margin-top: -17em;
+      width: 332px;
+    float: right;
+}
+#all-logos{
+    max-width: 23em;
+    margin-top: -13em;
+}
+#foto-bg{
+    max-width: 40em;
+}
+@media (max-width: 768px){
+    .nova-oportunidade{
+        margin-left: 2em;
+        margin-top: 3em;
+    }
+    .section-03-l02{
+        margin-left: 28em;
+    }
+    #foto-bg{
+        max-width: 19em;
+        display: none;
+    }
+    .img-logo-photo{
+        max-width: 285px;
+    }
+    .titulo-name p{
+        margin-bottom: -11px;
+    }
+    .titulo-name span{
+        font-size: 11px;
+        margin-left: 21px;
+    }
+ 
+    .nova-forma-div{
+        margin-top: -9em;
+    }
+    .text-depoimento-bottom{
+        max-width: 367px;
+        height: 11em;
+        font-size: 13px;
+        margin-left: -16em;
+    }
+    .titulo-name-02{
+        max-width: 317px;
+        font-size: 15px;
+        text-align: inherit;
+        margin-top: 2.1em;
+    }
+ 
+    #forma-a {
+        margin-top: -12em;
+    }
+    #btn-cadastro{
+        width: 79%;
+    }
+    .nova-oportunidade {
+        margin-left: -1em;
+        margin-top: 3em;
+    }
+    .nova-oportunidade h1{
+        font-size: 25px;
+    }
+    .section-03-l01{
+        margin-top: -5em;
+    }
+}
+@media (max-width: 998px){
+    .container-geral{
+        max-width: 917px;
+        width: 110%;
+    }
+    .section-03-l02{
+        margin-left: 15em;
+    }
+    #forma-a {
+        margin-top: -1em;
+    }
+    .nova-oportunidade {
+        margin-left: 2em;
+    }
+    .img-logo-photo{
+        display: none;
+        max-width: unset;
+        width: 115%;
+        height: 25em;
+    }
+    #btn-cadastro{
+        width: 70%;
+    }
+}
+@media (min-width: 999px){
+    #section-proposito{
+        display:block;
+        margin-left: 64% !important;
+        margin-top: unset;
+    }
+    }
+
+   @media (max-width: 600px){
+    .container-geral{
+        max-width: 320px;
+        width: 100%;
+    }
+   }
