@@ -61,7 +61,7 @@
                                                 <span class="font-weight-bold h3 ml-2 pt-2" style="color: #6a1ae8;">Contrariamente</span>
                                             </div>
                         <div class="m-my-4" id="text-primary-form">
-                            <p class="display-2 font-weight-bold" id="title-portal">UM NOVO PORTAL SE ABRE</p>
+                            <p class="display-2 font-weight-bold title-portal">UM NOVO PORTAL SE ABRE</p>
                             <p class="sub-text-form">Conecte-se com outros profissionais, compartilhe suas técnicas
                                 e encontre novas oportunidades de trabalho. Contrariamente é uma plataforma completa
                                 para profissionais e empresários da área da beleza e estética.</p>
@@ -170,8 +170,8 @@
 
              
                 </div>
-                <div class="col-12 col-md-6 offset-md-1" id="section-depoimentos">
-                  <div class="depoimento-top">
+                <div class="col-12 col-md-6 offset-md-1 feedback-top">
+                  <div class="feedback-one">
                   <div class="titulo-name">
                   <p>Bárbara Koch</p>
                   <span>Software Engineering Coordinator</span>
@@ -179,9 +179,9 @@
                   <div class="text-depoimento">
                       <p>
                       "Depois que eu entrei na Contrariamente a minha vida mudou mil vezes p/ melhor.
-                  Aqui tive a oportunidade de contratar pessoas super talentosas e compartilhar
-                  todo o meu trabalho com a rede. A usabilidade é ótima e com um design incrivel,
-                  não trocaria por nenhuma rede a nossa roxinha rs."
+                  Aqui tive a oportunidade de contratar pessoas super talentosas.
+                     A usabilidade é ótima e com um design incrivel,
+                     não trocaria por nenhuma rede a nossa roxinha rs."
                       </p>
                   
                   </div>
@@ -191,14 +191,14 @@
                 </div>
             </div>
             
-            <div class="">
-                <div class="section-03-l02">
+           <div class="">
+                <div class="feedback-two">
                 <img src="/img/alexandre.jpg" loading="lazy"  id="img-depoimento-02">
                 <div class="text-depoimento-bottom">
                 <p>O contrariamente me ajudou demais a encontrar novos trabalhos através das conexãoes,
                 acho que nos dias de hoje com tudo muito virtual essa rede apostou muito e ganhou!
                 </p>
-                 <div class="titulo-name-02">
+                 <div class="titulo-name-two">
                   <p>Alexadre Merello</p>
                   <span>Business Intelligence Analyst</span>
                   </div>
@@ -220,14 +220,40 @@
                 </button>
              
             </div>
-            <div class="img-logo-photo">
+         
+        </section>
+     
+        </section>
+        <div class="img-logo-photo">
             <img src="/img/foto-bglogo.png" loading="lazy"  id="foto-bg">
             </div>
-        </section>
-        </section>
-
     </main>
+    <footer>
+        <section class="logo-footer">
+        <img src="/img/logocontra-white.png" loading="lazy"  id="">
+        </section>
+        <ul>
+            <li><a href="">Cadastre-se</a></li>
+            <li><a>Central de Ajuda</a></li>
+            <li><a>Artigos</a></li>
+            <li><a>Newsletter</a></li>
+        </ul>
 
+        <ul>
+            <li><a>Trabalhe Conosco</a></li>
+            <li><a>Vendas</a></li>
+            <li><a>Seja um parceiro</a></li>
+            <li><a>Termos e Serviços</a></li>
+        </ul>
+        <section class="infos-contra">
+            <p>
+                2021 <b>Contrariamente</b><br>
+                @contrariamente<br>
+                contato@contrariamente.com
+            </p>
+        </section>
+
+    </footer>
 
 
 
