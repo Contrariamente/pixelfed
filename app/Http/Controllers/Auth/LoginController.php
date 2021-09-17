@@ -6,6 +6,7 @@ use App\AccountLog;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
@@ -49,13 +50,28 @@ class LoginController extends Controller
     public function handleCallbackProvider($provider){
         try{
             $user = Socialite::driver($provider)->user();
-
-            dd($user);
-        }catch (\Expection $ex){
+            $this->registerOrLoginByProvider($user, $provider);
+            return redirect('/home');
+        }catch (\Exception $ex){
             throw $ex;
         }
     }
 
+    public function registerOrLoginByProvider($data, $provider)
+    {
+        $user = User::where('email', '=', $data->email)->first();
+
+        if (!$user) {
+            $user = new User();
+            $user->name = $data->name;
+            $user->email = $data->email;
+            $user->provider = $provider;
+            $user->provider_id = $data->id;
+            $user->save();
+        }
+
+        Auth::login($user);
+    }
     /**
      * Validate the user login request.
      *
